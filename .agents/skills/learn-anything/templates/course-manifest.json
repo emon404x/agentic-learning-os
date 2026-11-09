@@ -1,0 +1,12 @@
+{
+  "schema_version": "2.0.0",
+  "slug": "example-course-mastery",
+  "title": "Example Topic — Complete Mastery",
+  "topic": "Example Topic",
+  "mode": "mastery",
+  "level": "beginner",
+  "language": "en",
+  "prerequisites": [],
+  "learning_objectives": [],
+  "modules": []
+}

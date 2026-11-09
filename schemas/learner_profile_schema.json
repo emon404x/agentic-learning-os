@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StardiLearnerProfile",
+  "type": "object",
+  "required": ["learner_id", "preferred_language", "current_level", "tracking_enabled"],
+  "properties": {
+    "learner_id": {"type": "string"},
+    "name": {"type": "string"},
+    "preferred_language": {"type": "string"},
+    "current_level": {"type": "string"},
+    "learning_objectives": {"type": "array", "items": {"type": "string"}},
+    "daily_study_hours": {"type": "number", "minimum": 0.25},
+    "preferred_teaching_style": {"type": "string"},
+    "completed_subjects": {"type": "array", "items": {"type": "string"}},
+    "known_prerequisites": {"type": "array", "items": {"type": "string"}},
+    "weak_areas": {"type": "array", "items": {"type": "string"}},
+    "tracking_enabled": {"type": "boolean"}
+  }
+}

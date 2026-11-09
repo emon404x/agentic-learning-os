@@ -1,0 +1,15 @@
+{
+  "name": "claudemy",
+  "owner": {
+    "name": "Assaf Kipnis",
+    "url": "https://askconsulting.io"
+  },
+  "description": "Claudemy: turn any topic into a researched course of 2-minute audio lessons with cited sources.",
+  "plugins": [
+    {
+      "name": "claudemy",
+      "source": "./",
+      "description": "Turn any topic into a researched course of 2-minute audio lessons."
+    }
+  ]
+}

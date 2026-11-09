@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+claudemy-workspace/
+claudemy/
+stardi_workspace/
+.env
+.env.*
+!.env.example

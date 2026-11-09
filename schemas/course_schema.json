@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StardiCourseSpec",
+  "type": "object",
+  "required": ["slug", "title", "topic", "mode", "level", "language", "prerequisites", "learning_objectives", "modules"],
+  "properties": {
+    "slug": {"type": "string"},
+    "title": {"type": "string"},
+    "topic": {"type": "string"},
+    "mode": {
+      "type": "string",
+      "enum": ["quick", "mastery", "exam", "project", "research", "materials", "expert", "troubleshooting"]
+    },
+    "level": {"type": "string"},
+    "language": {"type": "string"},
+    "prerequisites": {"type": "array", "items": {"type": "string"}},
+    "learning_objectives": {"type": "array", "items": {"type": "string"}},
+    "modules": {"type": "array"},
+    "lessons": {"type": "array"},
+    "disclaimer": {"type": "string"}
+  }
+}

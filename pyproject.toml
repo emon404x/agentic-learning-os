@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stardi-learning-engine"
+version = "2.0.0"
+description = "Stardi AI Learning Operating System: Modular AI-native learning, research, practical lab, assessment, and spaced-repetition engine for Google Antigravity."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Stardi AI Contributors"},
+]
+keywords = [
+    "antigravity",
+    "agent-skills",
+    "ai-tutor",
+    "education-technology",
+    "spaced-repetition",
+    "microlearning",
+    "research-assistant",
+    "coding-lab",
+]
+dependencies = [
+    "beautifulsoup4>=4.12.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+]
+
+[project.scripts]
+stardi = "learning_engine.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["learning_engine/src"]
