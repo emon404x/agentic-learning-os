@@ -24,6 +24,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from .agents.orchestrator import LearningOrchestrator
+from .agents.permissions import AutonomyLevel
 from .assessment.engine import evaluate_submission, generate_exam_suite
 from .core.dashboard import render_dashboard_html, render_dashboard_markdown
 from .core.intent_router import classify_learning_request
@@ -33,9 +35,11 @@ from .curriculum.study_planner import export_study_plan_ics, generate_study_plan
 from .documents.ingestor import ingest_document
 from .documents.paper_analyst import analyze_research_paper
 from .documents.repo_analyzer import analyze_repository
+from .mcp.adapters import AntigravitySDKRuntimeAdapter, create_default_mcp_registry
 from .practical_lab.lab_engine import create_coding_exercise, get_progressive_hint, run_exercise_tests
 from .revision.scheduler import create_flashcards_from_lesson, export_anki_csv, get_due_flashcards
 from .storage.store import LocalLearningStore
+from .tools.registry import create_default_tool_registry
 from .tutoring.adaptive_tutor import generate_adaptive_reexplanation
 
 
@@ -127,8 +131,54 @@ def main(argv: list[str] | None = None) -> int:
     p_prof.add_argument("--level", default=None)
     p_prof.add_argument("--reset", action="store_true")
 
+    # 14. orchestrate (Central Agentic Orchestrator)
+    p_orch = sub.add_parser("orchestrate", help="Run the 10-stage Central Learning Orchestrator across specialized agents")
+    p_orch.add_argument("query", help="Learning objective or multi-agent task")
+    p_orch.add_argument("--autonomy", type=int, default=2, choices=[0, 1, 2, 3, 4], help="Max autonomy level (0-4)")
+    p_orch.add_argument("--sequential", action="store_true", help="Disable parallel wave execution")
+
+    # 15. agents (Inspect the 10 Specialized Agents)
+    sub.add_parser("agents", help="List all 10 specialized agents and their bound skills/tools")
+
+    # 16. tools (Inspect the Modular Tool Registry)
+    p_tools = sub.add_parser("tools", help="List registered tools in the Modular Tool Registry")
+    p_tools.add_argument("--category", default=None, help="Filter by category")
+
+    # 17. mcp (Inspect MCP Connectors & Antigravity SDK Runtime)
+    sub.add_parser("mcp", help="List optional MCP server adapters and Antigravity SDK runtime status")
+
     args = parser.parse_args(argv)
     store = LocalLearningStore(args.workspace)
+
+    if args.cmd == "orchestrate":
+        orch = LearningOrchestrator(
+            store=store,
+            max_autonomy_level=AutonomyLevel(args.autonomy),
+            parallel_execution=not args.sequential,
+        )
+        res = orch.execute_goal(args.query)
+        _print_json(res.to_dict())
+        return 0
+
+    if args.cmd == "agents":
+        orch = LearningOrchestrator(store=store)
+        _print_json({"agent_count": len(orch.agents), "agents": orch.list_agents()})
+        return 0
+
+    if args.cmd == "tools":
+        reg = create_default_tool_registry(store=store)
+        tools_list = reg.list_tools(category=args.category)
+        _print_json({"tool_count": len(tools_list), "tools": tools_list})
+        return 0
+
+    if args.cmd == "mcp":
+        mcp_reg = create_default_mcp_registry()
+        sdk_adapter = AntigravitySDKRuntimeAdapter()
+        _print_json({
+            "antigravity_sdk_runtime": sdk_adapter.get_runtime_status(),
+            "mcp_connectors": mcp_reg.list_servers(),
+        })
+        return 0
 
     if args.cmd == "route":
         intent = classify_learning_request(args.query, default_lang=store.get_profile().preferred_language)

@@ -1,7 +1,7 @@
 MIT License
 
-Copyright (c) 2026 Assaf Kipnis (Original Claudemy skill & scripts)
-Copyright (c) 2026 Stardi AI Contributors (Stardi AI Learning Operating System, learning_engine, & 11-skill Antigravity ecosystem)
+Copyright (c) 2026 Md. Aktaruzzaman Emon (https://github.com/emon404x) — Agentic Learning OS (`learning_engine/`, `.agents/`, `mcp/`, `schemas/`, `templates/`, `docs/`, `scripts/alos.py`, `scripts/stardi.py`, `tests/test_acceptance_suite.py`, `tests/test_agentic_architecture.py`)
+Copyright (c) 2026 Assaf Kipnis — Original Claudemy Audio-Course Skill Components (`skills/claudemy/`, `hooks/export_elevenlabs_key.py`, `tests/test_scripts.py`)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

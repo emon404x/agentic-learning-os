@@ -132,8 +132,9 @@ def _parse_pdf(path: Path) -> tuple[list[tuple[str, str]], list[str]]:
                 blocks.append((f"{path.name}:page-{idx}", txt))
             else:
                 warnings.append(f"Page {idx} yielded no extractable text (scanned image or unsupported font encoding).")
-        return blocks, warnings
-    except ImportError:
+        if blocks:
+            return blocks, warnings
+    except Exception:
         pass
 
     # Fallback: extract literal text strings from uncompressed PDF content streams

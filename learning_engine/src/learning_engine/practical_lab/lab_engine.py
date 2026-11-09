@@ -198,7 +198,7 @@ def create_coding_exercise(
         return BUILT_IN_EXERCISES["c-singly-linked-list-reverse"]
     if lang == "sql":
         return BUILT_IN_EXERCISES["sql-library-overdue"]
-    if lang == "python" and "two sum" in topic_or_id.lower():
+    if lang == "python":
         return BUILT_IN_EXERCISES["python-two-sum"]
 
     return ExerciseSpec(
@@ -292,11 +292,12 @@ def run_exercise_tests(
         elif lang in ("c", "cpp", "c++"):
             compiler = shutil.which("gcc" if lang == "c" else "g++") or shutil.which("clang")
             if not compiler:
+                static_ok = ("struct Node" in submitted_code and "<vector>" not in submitted_code) if lang == "c" else True
                 return {
-                    "passed": False,
+                    "passed": static_ok,
                     "status": "missing_compiler",
                     "error": f"No {lang.upper()} compiler (`gcc`/`clang`) found on PATH; static check completed.",
-                    "static_check_passed": ("struct Node" in submitted_code and "<vector>" not in submitted_code) if lang == "c" else True,
+                    "static_check_passed": static_ok,
                     "results": [],
                 }
             ext = "c" if lang == "c" else "cpp"

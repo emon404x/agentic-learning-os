@@ -1,65 +1,28 @@
-# Stardi AI — Complete Feature Guide (Feature Sets A–P)
+# Complete Feature Reference (`Agentic Learning OS` v3.0.0)
 
-## Feature Set A — Universal Course Generator (8 Modes)
-Implemented in [`course_generator.py`](../learning_engine/src/learning_engine/curriculum/course_generator.py):
-1. **Quick Learning (`quick`)**: Essential mental model, terminology, worked example, and 5-minute check.
-2. **Complete Mastery (`mastery`)**: Prerequisites, 4-module beginner-to-advanced progression, labs, and capstone evaluation.
-3. **Examination Preparation (`exam`)**: High-yield definitions, step-by-step worked mathematical problems, short/long/viva questions, and timed mock exam.
-4. **Project-Based Learning (`project`)**: Staged architecture, implementation milestones, testing, and debugging.
-5. **Research Learning (`research`)**: Seminal literature, methodology comparison, datasets, limitations, and open problems.
-6. **Learn From My Materials (`materials`)**: Grounded in user-supplied PDFs, DOCX, PPTX, notebooks, notes, or repositories.
-7. **Learn a Specific Expert's Approach (`expert`)**: Built from a named practitioner/researcher's work, distinguishing their stated claims from tutor commentary.
-8. **Troubleshooting Tutor (`troubleshooting`)**: Root-cause diagnosis, analogy, step-by-step fix, and isomorphic practice problem.
+**Project Name**: Agentic Learning OS (`agentic-learning-os`)  
+**Developer & Maintainer**: **Md. Aktaruzzaman Emon** ([@emon404x](https://github.com/emon404x))  
+**Tagline**: *Learn Anything. Build Everything. Master More.*
 
-## Feature Set B — Advanced Research Engine (7 Modes)
-Implemented in [`research/engine.py`](../learning_engine/src/learning_engine/research/engine.py) and [`sources/evaluator.py`](../learning_engine/src/learning_engine/sources/evaluator.py):
-- Qualitative source evaluation recording title, author/org, publication date, access date, URL, source type, relevance, and limitations.
-- Evidence comparison computing `N of M` distinct source agreement, disagreements, and thin-evidence flags.
-- Strict citation verification (`verify_citations`) rejecting any URL or local reference not present on disk.
+---
 
-## Feature Set C — Intelligent Personal AI Tutor
-Implemented in [`tutoring/adaptive_tutor.py`](../learning_engine/src/learning_engine/tutoring/adaptive_tutor.py):
-- Supports 9 teaching styles (`beginner`, `detailed`, `socratic`, `simple`, `university`, `professional`, `exam`, `practical_first`, `theory_first`).
-- 6-step adaptive re-explanation protocol when a learner says `"I don't understand X"`.
-- Active understanding verification (`evaluate_learner_explanation`) and misconception logging.
+## Feature Matrix
 
-## Feature Set D — Knowledge Graph & Prerequisite Engine
-Implemented in [`curriculum/knowledge_graph.py`](../learning_engine/src/learning_engine/curriculum/knowledge_graph.py):
-- 36 built-in concept nodes across Computer Science, Networking, Operating Systems, Databases, C/DSA, Python, Web/Django, and Cybersecurity.
-- Topological prerequisite resolution, missing-foundation diagnosis, next-topic recommendations, and Mermaid `flowchart TD` generation.
-
-## Feature Set E — Practical Learning Lab
-Implemented in [`practical_lab/lab_engine.py`](../learning_engine/src/learning_engine/practical_lab/lab_engine.py):
-- Supports C, C++, Java, Python, JavaScript, SQL (`sqlite3`), HTML, and CSS.
-- Enforces 3-level progressive hints (`Hint 1 -> Hint 2 -> Hint 3`) before revealing `solution_code`.
-- Executes code safely in an isolated temporary directory with static destructive-command blocking and per-test timeouts.
-
-## Feature Set F — Real Project Mentor
-Implemented in [`curriculum/project_mentor.py`](../learning_engine/src/learning_engine/curriculum/project_mentor.py):
-- 12-step mentorship blueprint with functional/non-functional requirements, Mermaid architecture diagrams, file-by-file role explanations, code review checklists, test plans, and debugging protocols.
-
-## Feature Set G — Advanced Assessment Engine
-Implemented in [`assessment/engine.py`](../learning_engine/src/learning_engine/assessment/engine.py):
-- Generates MCQs, short-answer, worked mathematical problems, long-answer, scenario-based, and viva questions.
-- Evaluates submissions across 6 criteria with explicit grading uncertainty notes and a formative disclaimer.
-
-## Feature Set H & I — Spaced Repetition, Memory & Personal Dashboard
-Implemented in [`revision/scheduler.py`](../learning_engine/src/learning_engine/revision/scheduler.py), [`mastery/tracker.py`](../learning_engine/src/learning_engine/mastery/tracker.py), [`storage/store.py`](../learning_engine/src/learning_engine/storage/store.py), and [`core/dashboard.py`](../learning_engine/src/learning_engine/core/dashboard.py):
-- SM-2 interval scheduling, Anki-compatible CSV export (`export_anki_csv`), evidence-based mastery tracking, and offline Markdown/HTML dashboards.
-
-## Feature Set J & K — Audio/Podcast & Visual Learning Studios
-Implemented in [`audio/studio.py`](../learning_engine/src/learning_engine/audio/studio.py) and [`visualization/studio.py`](../learning_engine/src/learning_engine/visualization/studio.py):
-- Single-narrator, two-host dialogue, interview, and chapter audio formats with synchronized `transcript.json` and `chapters.json`.
-- Modular providers: ElevenLabs, macOS `say`, Windows SAPI (`System.Speech`), and honest Text-Only fallback.
-- Validated Mermaid sequence, ER, state, and flowchart generators + algorithm state trace tables.
-
-## Feature Set L, M & P — Documents, Academic Papers & GitHub Repositories
-Implemented in [`documents/ingestor.py`](../learning_engine/src/learning_engine/documents/ingestor.py), [`documents/paper_analyst.py`](../learning_engine/src/learning_engine/documents/paper_analyst.py), and [`documents/repo_analyzer.py`](../learning_engine/src/learning_engine/documents/repo_analyzer.py):
-- Multi-format ingestion (PDF, DOCX, PPTX, IPYNB, MD, TXT, HTML, CSV, source code) preserving exact location references without modifying original files.
-- 12-dimension academic paper breakdown separating *Author Claims* from *Tutor Interpretation* + multi-paper comparison matrix.
-- Real repository AST/dependency/entrypoint inspection and code-grounded exercises.
-
-## Feature Set N & O — Multilingual Learning & Smart Study Planner
-Implemented in [`core/i18n.py`](../learning_engine/src/learning_engine/core/i18n.py) and [`curriculum/study_planner.py`](../learning_engine/src/learning_engine/curriculum/study_planner.py):
-- English (`en`) and Bangla (`bn`) bilingual support preserving English technical terms alongside Bangla explanations.
-- Day-by-day study schedule generation, dynamic recalculation, and RFC 5545 `.ics` calendar export.
+| Feature Subsystem | Module Path | Key Capabilities |
+| :--- | :--- | :--- |
+| **Central Learning Orchestrator** | `learning_engine/agents/orchestrator.py` | 10-stage agentic loop, DAG task planning, parallel wave execution (`ThreadPoolExecutor`), timeout & partial-failure recovery. |
+| **10 Specialized Agents** | `learning_engine/agents/specialists.py` | `ResearchAgent`, `CurriculumArchitectAgent`, `PersonalTutorAgent`, `PracticalLabAgent`, `AssessmentAgent`, `RevisionAgent`, `ResearchPaperAgent`, `ProjectMentorAgent`, `KnowledgeManagerAgent`, `QualityAndSafetyAgent`. |
+| **Autonomy & Safety Guard** | `learning_engine/agents/permissions.py` | Levels 0–4 permission checks, loop detection (`AgentLoopError`), `CancellationToken`, conflicting instruction blocker, execution audit log. |
+| **Modular Tool Registry** | `learning_engine/tools/registry.py` | 15+ schema-validated tools across Research, Document, Programming, Knowledge, Learning, Media, and Integration categories. |
+| **MCP & Antigravity SDK** | `learning_engine/mcp/adapters.py` | 7 optional MCP connectors (`stdio` & `streamable_http`), `mcp_config.example.json`, and `google.antigravity` SDK detection. |
+| **Universal Course Generator** | `learning_engine/curriculum/course_generator.py` | 8 modes (`quick`, `mastery`, `exam`, `project`, `research`, `materials`, `expert`, `troubleshooting`), English & Bangla (`bn`). |
+| **Knowledge Graph Engine** | `learning_engine/curriculum/knowledge_graph.py` | 36-node prerequisite DAG across CS, DSA/C, Networking, OS, DB, Python, Django, Cybersecurity + Mermaid `flowchart TD`. |
+| **Advanced Research Engine** | `learning_engine/research/engine.py` | 7 research modes, qualitative source evaluation, `N of M` consensus & split comparison, strict citation verification. |
+| **State-Aware Adaptive Tutor** | `learning_engine/tutoring/adaptive_tutor.py` | 9 teaching styles, 8-step adaptive re-explanation protocol, Socratic questions, misconception tracking, bilingual `en`/`bn`. |
+| **Practical Learning Lab** | `learning_engine/practical_lab/lab_engine.py` | C, C++, Java, Python, JS, SQL, HTML, CSS exercises; 3-level progressive hints withholding solutions; sandboxed test runner. |
+| **12-Step Project Mentor** | `learning_engine/curriculum/project_mentor.py` | Supports Python, Django, C/C++, Java, Flutter, APIs, Databases, Machine Learning, and Authorized Cybersecurity projects. |
+| **Assessment & Exam Engine** | `learning_engine/assessment/engine.py` | MCQs, short/long questions, worked math proofs, coding, scenario, viva, timed mock exams, and 6-criterion rubric grading. |
+| **Spaced Repetition & Memory** | `learning_engine/storage/store.py` & `revision/scheduler.py` | `LocalLearningStore`, SuperMemo-2 (SM-2) scheduler, Anki CSV export, evidence-based mastery tracker, ZIP backup. |
+| **Document, Paper & Repo Engine** | `learning_engine/documents/` | PDF/DOCX/PPTX/IPYNB/MD/CSV/HTML ingestor, 12-dimension research paper analyst + multi-paper comparison, AST repository analyzer. |
+| **Audio & Visual Studio** | `learning_engine/audio/studio.py` & `visualization/studio.py` | ElevenLabs + macOS `say` + Windows SAPI + honest Text-Only fallback; synced transcripts/chapters; Mermaid sequence/ER/state diagrams. |
+| **Smart Study Planner** | `learning_engine/curriculum/study_planner.py` | Day-by-day schedule, dynamic missed-day recalculation, and RFC 5545 `.ics` calendar export. |

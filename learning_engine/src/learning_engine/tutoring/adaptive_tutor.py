@@ -111,8 +111,10 @@ def generate_adaptive_reexplanation(
     concept_or_query: str,
     style: str = TeachingStyle.SIMPLE.value,
     language: str = "en",
+    learner_profile: dict[str, Any] | None = None,
+    learner_answer: str | None = None,
 ) -> dict[str, Any]:
-    """Generate a structured 6-step adaptive explanation for a concept the learner finds difficult."""
+    """Generate a structured adaptive explanation (supporting both 6-step and 8-step state-aware protocols)."""
     q_lower = concept_or_query.lower()
     matched_key = next((k for k in BUILT_IN_REEXPLANATIONS if k in q_lower), None)
 
@@ -151,6 +153,33 @@ def generate_adaptive_reexplanation(
             ),
         }
 
+    # Build learning-state awareness snapshot (Section 8)
+    profile = learner_profile or {}
+    mastery_map = profile.get("concept_mastery", {})
+    known_concepts = [cid for cid, m in mastery_map.items() if isinstance(m, dict) and m.get("state") == "mastered"]
+    uncertain_concepts = [cid for cid, m in mastery_map.items() if isinstance(m, dict) and m.get("state") in ("exposed", "learning", "practiced")]
+    weak_concepts = list(dict.fromkeys(profile.get("weak_concepts", []) + [
+        cid for cid, m in mastery_map.items() if isinstance(m, dict) and m.get("state") == "needs_revision"
+    ]))
+
+    evaluation = None
+    next_decision = "awaiting_learner_response"
+    if learner_answer is not None:
+        evaluation = evaluate_learner_explanation(data["concept_id"], learner_answer)
+        next_decision = "continue_to_next_concept" if evaluation["understood"] else "revise_prerequisite_and_retry"
+
+    smaller_parts = [
+        f"Part A (Core entity): What inputs does '{data['concept_id']}' operate on?",
+        "Part B (Transformation rule): What single operation changes the state?",
+        "Part C (Boundary / Invariant): What condition must hold before and after the operation?",
+    ]
+
+    socratic_prompts = [
+        f"Before looking at the formula, what do you think happens at the boundary case of {data['concept_id']}?",
+        f"If we change one input bit/element in {data['concept_id']}, which part of the output must change?",
+        data["explain_back_question"],
+    ]
+
     result = {
         "topic": concept_or_query,
         "teaching_style": style,
@@ -164,6 +193,25 @@ def generate_adaptive_reexplanation(
         "step_6_active_verification": {
             "similar_practice_problem": data["similar_practice_problem"],
             "explain_back_prompt": data["explain_back_question"],
+        },
+        "eight_step_protocol": {
+            "step_1_identify_misunderstood_concept": data["difficult_part"],
+            "step_2_break_into_smaller_parts": smaller_parts,
+            "step_3_explain_simple_language": data["different_wording"],
+            "step_4_give_analogy": data["real_life_analogy"],
+            "step_5_worked_example": data["simpler_example"],
+            "step_6_ask_question": data["explain_back_question"],
+            "step_7_evaluate_answer": evaluation or {"status": "pending_learner_input", "prompt": data["explain_back_question"]},
+            "step_8_decide_continue_or_revise": next_decision,
+        },
+        "socratic_questions": socratic_prompts,
+        "learner_state_awareness": {
+            "known_concepts": known_concepts,
+            "uncertain_concepts": uncertain_concepts,
+            "weak_concepts": weak_concepts,
+            "unlearned_prerequisites": profile.get("unlearned_prerequisites", []),
+            "completed_lessons": profile.get("completed_lessons", []),
+            "assessment_results_count": len(profile.get("assessment_history", [])),
         },
         "concept_id": data["concept_id"],
     }

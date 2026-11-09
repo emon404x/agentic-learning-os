@@ -1,28 +1,22 @@
 # Changelog
 
-All notable changes to this project are documented in this file.
+All notable changes to **Agentic Learning OS** (`agentic-learning-os`) are documented in this file.
 
-## [2.0.0] — 2026-11-09 — Stardi AI Learning Operating System
+## [3.0.0] - 2026-11-09 — Agentic Learning OS Major Upgrade
+**Maintainer**: Md. Aktaruzzaman Emon ([@emon404x](https://github.com/emon404x))
+
 ### Added
-- **Google Antigravity 11-Skill Ecosystem (`.agents/skills/`)**:
-  - `learn-anything`, `research-librarian`, `course-architect`, `adaptive-tutor`, `practical-learning-lab`, `assessment-coach`, `revision-coach`, `knowledge-librarian`, `research-paper-analyst`, `audio-visual-studio`, and `project-mentor`, plus `.agents/AGENTS.md` workspace rules.
-- **Modular `learning_engine` Python Package & Unified CLI (`scripts/stardi.py`)**:
-  - **Intent Router (`core/intent_router.py`)**: Automatic classification of natural-language prompts across 8 course modes, 7 research modes, and 9 teaching styles.
-  - **Universal Course Generator (`curriculum/course_generator.py`)**: Supports `quick`, `mastery`, `exam`, `project`, `research`, `materials`, `expert`, and `troubleshooting` modes.
-  - **Knowledge Graph & Prerequisite Engine (`curriculum/knowledge_graph.py`)**: 36 built-in concept nodes across CS, Networking, OS, Databases, DSA, Python, Web/Django, and Cybersecurity with missing-foundation detection and Mermaid `flowchart TD` generation.
-  - **Adaptive Personal Tutor (`tutoring/adaptive_tutor.py`)**: 6-step re-explanation protocol for `"I don't understand X"` + active understanding verification.
-  - **Multilingual Learning (`core/i18n.py`)**: Full English (`en`) and Bangla (`bn`) bilingual technical teaching preserving English technical terminology alongside Bangla explanations.
-  - **Practical Learning Lab (`practical_lab/lab_engine.py`)**: Exercises for C, C++, Java, Python, JS, SQL, HTML/CSS with 3-level progressive hints (`Hint 1 -> Hint 2 -> Hint 3 -> Solution`) and sandboxed test execution.
-  - **12-Step Real Project Mentor (`curriculum/project_mentor.py`)**: Guided project mentorship with architecture diagrams, staged implementation, and review checklists.
-  - **Advanced Assessment Engine (`assessment/engine.py`)**: MCQ, short/long answer, worked mathematical problems, coding, scenario, viva, and timed mock exams with 6-criterion rubric evaluation.
-  - **Evidence-Based Mastery & Spaced Repetition (`mastery/tracker.py`, `revision/scheduler.py`)**: SM-2 interval scheduler and Anki CSV exporter.
-  - **Multi-Format Document, Paper, & Repository Learning (`documents/`)**: Ingests PDF, DOCX, PPTX, IPYNB, MD, TXT, HTML, CSV, source code, and GitHub/local repositories with exact location references, plus 12-dimension academic paper analysis.
-  - **Smart Study Planner (`curriculum/study_planner.py`)**: Day-by-day schedule generator, dynamic recalculation, and RFC 5545 `.ics` calendar export.
-  - **Audio & Visual Studio (`audio/studio.py`, `visualization/studio.py`)**: Modular TTS providers (ElevenLabs, macOS `say`, Windows SAPI, and honest text-only fallback) + Mermaid sequence/ER/state diagrams and algorithm state trace tables.
-  - **Personal Learning Dashboard (`core/dashboard.py`)**: Local Markdown (`DASHBOARD.md`) and standalone offline HTML (`dashboard.html`) dashboards.
+- **Central Learning Orchestrator (`learning_engine.agents.orchestrator`)**: 10-stage execution cycle (`UNDERSTAND -> PLAN -> SELECT_AGENTS -> SELECT_TOOLS -> EXECUTE -> OBSERVE -> VERIFY -> REFLECT -> SAVE_PROGRESS -> RESPOND`) with parallel DAG wave execution (`ThreadPoolExecutor`), per-task timeouts, retries, and graceful partial-failure recovery.
+- **10 Specialized Agents (`learning_engine.agents.specialists`)**: `ResearchAgent`, `CurriculumArchitectAgent`, `PersonalTutorAgent`, `PracticalLabAgent`, `AssessmentAgent`, `RevisionAgent`, `ResearchPaperAgent`, `ProjectMentorAgent`, `KnowledgeManagerAgent`, and `QualityAndSafetyAgent`.
+- **5-Tier Autonomy & Permission System (`learning_engine.agents.permissions`)**: `LEVEL_0_READ` through `LEVEL_4_EXPLICIT_CONFIRMATION`, loop prevention (`AgentLoopError`), cancellation tokens (`CancellationToken`), and audit logging.
+- **Modular Agentic Tool Registry (`learning_engine.tools.registry`)**: Schema-validated tools across Research, Document, Programming, Knowledge, Learning, Media, and Integration categories with automatic secret redaction.
+- **MCP & Google Antigravity SDK Adapters (`learning_engine.mcp.adapters`)**: 7 isolated MCP server connectors (`stdio` and `streamable_http`), `mcp/mcp_config.example.json`, and `AntigravitySDKRuntimeAdapter` (`google.antigravity`).
+- **Expanded Adaptive Tutor & Project Mentor**: 8-step learning-state-aware re-explanation protocol with Socratic prompts, and 9 supported project domains (Python, C/C++, Java, Django, Flutter, APIs, Databases, Machine Learning, Cybersecurity).
+- **New CLI Entrypoint & Subcommands**: `scripts/alos.py` (`orchestrate`, `agents`, `tools`, `mcp`) alongside preserved `scripts/stardi.py`.
+- **Comprehensive Agentic Test Suite**: `tests/test_agentic_architecture.py` covering all 20 Section 16 architecture checks and all 12 Section 19 acceptance tests (**74/74 total tests passing**).
 
-### Fixed
-- Fixed Windows UTF-8 file reading/writing in `scrape.py` and `render_audio.py` (`stamp_card`), Windows LF line ending in `hooks/export_elevenlabs_key.py`, and added Windows SAPI (`System.Speech`) offline two-host TTS fallback.
+## [2.0.0] - 2026-11-09 — Modular Learning Operating System Foundation
+- Added 8-mode course generator, 36-node prerequisite Knowledge Graph, 7-mode research engine, multi-language coding lab, 12-dimension research paper analyst, multi-format document ingestor, repository AST analyzer, SM-2 spaced repetition store, and English/Bangla bilingual support.
 
-## [0.3.2] — Inherited Baseline (`assafkip/claudemy`)
-- Original Claude Code audio micro-course skill by Assaf Kipnis.
+## [0.4.3] - Inherited Baseline (`assafkip/claudemy`)
+- Original two-host audio course generator skill by Assaf Kipnis (preserved under `skills/claudemy/` and `.agents/skills/claudemy/`).

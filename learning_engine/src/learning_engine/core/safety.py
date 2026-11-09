@@ -98,3 +98,38 @@ def get_domain_disclaimer(domain_or_text: str | None) -> str:
         return HIGH_STAKES_DOMAINS[domain_or_text]
     detected = detect_high_stakes_domain(domain_or_text)
     return HIGH_STAKES_DOMAINS.get(detected, "") if detected else ""
+
+
+def get_safety_disclaimer(domain_or_text: str | None) -> str:
+    """Alias for `get_domain_disclaimer`."""
+    return get_domain_disclaimer(domain_or_text)
+
+
+def validate_safe_url(url: str) -> str:
+    """Validate that a URL uses HTTP/HTTPS and does not target loopback, RFC 1918 private, or metadata IPs."""
+    from urllib.parse import urlparse
+
+    parsed = urlparse(url.strip())
+    if parsed.scheme not in ("http", "https"):
+        raise ValueError(f"Blocked unsafe URL scheme '{parsed.scheme}': only http/https are permitted.")
+    host = (parsed.hostname or "").lower()
+    if not host:
+        raise ValueError("URL is missing a valid hostname.")
+    blocked_hosts = {"localhost", "127.0.0.1", "0.0.0.0", "::1", "169.254.169.254", "metadata.google.internal"}
+    if host in blocked_hosts or host.startswith(("10.", "192.168.", "169.254.")) or re.match(r"^172\.(1[6-9]|2\d|3[0-1])\.", host):
+        raise ValueError(f"Blocked SSRF/private network target host: '{host}'.")
+    return url.strip()
+
+
+def resolve_safe_workspace_path(workspace_root: str | object, candidate_path: str | object) -> "Path":
+    """Resolve `candidate_path` and ensure it resides strictly inside `workspace_root`."""
+    from pathlib import Path
+
+    root = Path(str(workspace_root)).resolve()
+    target = (root / Path(str(candidate_path))).resolve() if not Path(str(candidate_path)).is_absolute() else Path(str(candidate_path)).resolve()
+    try:
+        target.relative_to(root)
+    except ValueError as exc:
+        raise PermissionError(f"Path traversal blocked: '{candidate_path}' escapes workspace '{root}'.") from exc
+    return target
+

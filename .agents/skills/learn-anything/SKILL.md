@@ -1,36 +1,33 @@
 ---
 name: learn-anything
-description: >-
-  Main orchestrator skill for the Stardi AI Learning Operating System. Routes any learning request
-  ("Teach me X", "Prepare me for my exam", "I don't understand X", "Explain this research paper",
-  "Teach me the code in this repository", "Help me build a project while learning", "Test me on
-  what I learned") across the 8 course modes, 7 research modes, adaptive tutor, practical lab,
-  assessment engine, and spaced-repetition memory store.
+description: Central Learning Orchestrator skill for Agentic Learning OS (maintained by Md. Aktaruzzaman Emon, @emon404x). Executes the 10-stage agentic loop (UNDERSTAND -> PLAN -> SELECT_AGENTS -> SELECT_TOOLS -> EXECUTE -> OBSERVE -> VERIFY -> REFLECT -> SAVE_PROGRESS -> RESPOND) across 10 specialized agents, 20+ registered tools, 8 course modes, persistent learner memory, and 5 autonomy levels.
 ---
 
-# Learn Anything — Main Learning Orchestrator
+# Central Learning Orchestrator (`learn-anything`)
 
-Coordinates the full Stardi AI lifecycle:
-`RESEARCH -> UNDERSTAND -> PLAN -> LEARN -> PRACTICE -> BUILD -> TEST -> REVIEW -> MASTER`
+You are the **Central Learning Orchestrator** of **Agentic Learning OS** (`agentic-learning-os` v3.0.0), developed and maintained by **Md. Aktaruzzaman Emon** ([@emon404x](https://github.com/emon404x)).
 
-## Step 1. Classify Intent & Check Learner Profile
-Run the intent router and inspect local progress:
-```bash
-python scripts/stardi.py route "<user request>"
-python scripts/stardi.py profile
+## 1. The 10-Stage Agentic Execution Cycle
+For every learning request or autonomous multi-agent task, execute this structured loop via `LearningOrchestrator` (`python scripts/alos.py orchestrate "<query>"`):
+
+1. **UNDERSTAND**: Classify objective, target language (`en` / `bn`), learner level, high-stakes safety domain, and check for conflicting/adversarial instructions.
+2. **PLAN**: Build a dependency-aware DAG of `AgentTask`s (`depends_on`).
+3. **SELECT_AGENTS**: Bind each task to the appropriate specialist from the 10-agent team (`research_agent`, `curriculum_architect_agent`, `personal_tutor_agent`, `practical_lab_agent`, `assessment_agent`, `revision_agent`, `research_paper_agent`, `project_mentor_agent`, `knowledge_manager_agent`, `quality_safety_agent`).
+4. **SELECT_TOOLS**: Validate required tools and autonomy levels in `ToolRegistry`.
+5. **EXECUTE**: Run independent tasks in parallel topological waves (`ThreadPoolExecutor`) and dependent tasks sequentially, enforcing per-task timeouts and retries.
+6. **OBSERVE**: Collect structured `AgentExecutionReport`s and tool invocation logs.
+7. **VERIFY**: Run `QualityAndSafetyAgent` to verify citation integrity, instruction safety, and permission compliance.
+8. **REFLECT**: Recover gracefully from partial agent failures or timeouts without losing completed work.
+9. **SAVE_PROGRESS**: Persist course blueprints, SM-2 flashcards, misconceptions, and evidence-based mastery states in `LocalLearningStore`.
+10. **RESPOND**: Present the verified result with clear attribution of which agents and tools executed each step.
+
+## 2. Quick CLI Orchestration Commands
+```powershell
+# Run full 10-stage multi-agent orchestration:
+python scripts/alos.py orchestrate "Research computer networking and create a structured course with reliable sources"
+
+# Inspect the 10 specialized agents and 16+ registered tools:
+python scripts/alos.py agents
+python scripts/alos.py tools
+python scripts/alos.py mcp
 ```
-See [workflow-matrix.md](./references/workflow-matrix.md) for the complete mapping of user requests to the 8 course modes and 10 specialized skills.
-
-## Step 2. Select & Execute the Matching Workflow
-- **Mode 1 (`quick`) / Mode 2 (`mastery`)**: Delegate research to `research-librarian`, generate the prerequisite graph and course blueprint with `course-architect` (`python scripts/stardi.py course "<topic>" --mode <quick|mastery> --lang <en|bn>`), and register in `./stardi_workspace/`.
-- **Mode 3 (`exam`)**: Activate `assessment-coach` (`python scripts/stardi.py exam "<topic>"`) for syllabus analysis, definitions, worked mathematical problems, short/long/viva questions, and timed mock exams.
-- **Mode 4 (`project`)**: Activate `project-mentor` (`python scripts/stardi.py project "<goal>" --tech "<tech>"`) for 12-step guided implementation without taking over the learner's work.
-- **Mode 5 (`research`)**: Activate `research-paper-analyst` (`python scripts/stardi.py paper "<source>"`) and `research-librarian`.
-- **Mode 6 (`materials`)**: Activate `knowledge-librarian` (`python scripts/stardi.py ingest "<file>"` or `python scripts/stardi.py repo "<repo_path>"`) to ground lessons in exact page/slide/cell/line references.
-- **Mode 7 (`expert`)**: Activate `research-librarian` in `expert_specific` mode + `course-architect` (`--mode expert --expert "<Name>"`), strictly separating the expert's stated views from tutor commentary.
-- **Mode 8 (`troubleshooting`)**: Activate `adaptive-tutor` (`python scripts/stardi.py tutor "<query>"`) for the 6-step re-explanation protocol.
-
-## Step 3. Persist Progress & Schedule Reviews
-After every lesson, exercise, or quiz:
-- Update the local store (`./stardi_workspace/state.json`) and generate flashcards (`revision-coach`).
-- Refresh the learner's dashboard (`python scripts/stardi.py dashboard`).

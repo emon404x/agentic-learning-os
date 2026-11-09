@@ -1,150 +1,109 @@
-# Stardi AI — Next-Generation AI Learning Operating System
+# Agentic Learning OS (`v3.0.0`)
 
-**Stardi AI** (`stardi-learning-engine` v2.0.0) is an open-source, modular AI Learning Operating System built natively for **Google Antigravity** (and compatible with CLI and other agent environments).
+> **Learn Anything. Build Everything. Master More.**  
+> **Category**: Agentic AI / Education / Multi-Agent Systems  
+> **Developer & Maintainer**: **Md. Aktaruzzaman Emon** ([@emon404x](https://github.com/emon404x))  
+> **Repository**: [https://github.com/emon404x/agentic-learning-os](https://github.com/emon404x/agentic-learning-os)
 
-Instead of generating the same fixed 12-lesson audio course for every prompt, Stardi AI implements the full cognitive mastery loop:
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg)](pyproject.toml)
+[![Google Antigravity](https://img.shields.io/badge/Google%20Antigravity-Agent%20Skills%20%26%20MCP-4285F4.svg)](.agents/AGENTS.md)
+[![Tests: 74 Passing](https://img.shields.io/badge/Tests-74%20Passing-brightgreen.svg)](tests/)
+[![Maintainer: emon404x](https://img.shields.io/badge/Maintainer-%40emon404x-181717.svg)](https://github.com/emon404x)
 
-```text
-RESEARCH -> UNDERSTAND -> PLAN -> LEARN -> PRACTICE -> BUILD -> TEST -> REVIEW -> MASTER
-```
-
-It combines a **12-skill Google Antigravity Agent Skills ecosystem** (`.agents/skills/`) with a zero-bloat, stdlib-first Python engine (`learning_engine/`) and unified CLI (`scripts/stardi.py`).
+**Agentic Learning OS** (`agentic-learning-os`) is a next-generation, multi-agent AI Learning Operating System designed for **Google Antigravity Agent Skills** and standalone Python/CLI workflows. It combines autonomous multi-agent orchestration, verified multi-source research, adaptive state-aware tutoring, multi-language coding laboratories, guided software project mentorship, academic paper analysis, repository AST inspection, and SM-2 spaced repetition memory.
 
 ---
 
-## Architecture Overview
+## 1. Two Core Loops
+
+### Pedagogical Mastery Loop
+$$\text{RESEARCH} \rightarrow \text{UNDERSTAND} \rightarrow \text{PLAN} \rightarrow \text{LEARN} \rightarrow \text{PRACTICE} \rightarrow \text{BUILD} \rightarrow \text{TEST} \rightarrow \text{REVIEW} \rightarrow \text{MASTER}$$
+
+### 10-Stage Agentic Execution Loop (`LearningOrchestrator`)
+$$\text{UNDERSTAND} \rightarrow \text{PLAN} \rightarrow \text{SELECT\_AGENTS} \rightarrow \text{SELECT\_TOOLS} \rightarrow \text{EXECUTE} \rightarrow \text{OBSERVE} \rightarrow \text{VERIFY} \rightarrow \text{REFLECT} \rightarrow \text{SAVE\_PROGRESS} \rightarrow \text{RESPOND}$$
 
 ```mermaid
 flowchart TD
-    User["Learner Request (English or Bangla)"] --> Router["learn-anything / Intent Router"]
-    Router --> Research["research-librarian (7 Research Modes & Citation Verifier)"]
-    Router --> Course["course-architect (8 Course Modes, Knowledge Graph & .ics Planner)"]
-    Router --> Tutor["adaptive-tutor (9 Teaching Styles & 6-Step Re-Explanation)"]
-    Router --> Lab["practical-learning-lab (C/C++/Java/Python/JS/SQL Sandbox & Progressive Hints)"]
-    Router --> Project["project-mentor (12-Step Guided Project Coaching)"]
-    Router --> Paper["research-paper-analyst (12-Dimension Academic Paper Breakdown)"]
-    Router --> Docs["knowledge-librarian (PDF/DOCX/PPTX/IPYNB/MD & GitHub Repo Analyzer)"]
-    Router --> Assess["assessment-coach (MCQ/Math/Coding/Viva & 6-Criterion Rubric)"]
-    Router --> Revision["revision-coach (SM-2 Spaced Repetition, Mastery & Anki CSV)"]
-    Router --> Studio["audio-visual-studio (TTS Providers, Transcripts & Mermaid Visuals)"]
-    Course & Tutor & Lab & Assess & Revision --> Store[("LocalLearningStore (stardi_workspace/ + Dashboard)")]
+    User["Learner Objective (English / বাংলা)"] --> Orch["Central Learning Orchestrator (LearningOrchestrator)"]
+    Orch --> Plan["DAG Task Planner (Parallel & Sequential Waves)"]
+
+    subgraph Agents ["10 Specialized Agents"]
+        A1["1. ResearchAgent"]
+        A2["2. CurriculumArchitectAgent"]
+        A3["3. PersonalTutorAgent"]
+        A4["4. PracticalLabAgent"]
+        A5["5. AssessmentAgent"]
+        A6["6. RevisionAgent"]
+        A7["7. ResearchPaperAgent"]
+        A8["8. ProjectMentorAgent"]
+        A9["9. KnowledgeManagerAgent"]
+        A10["10. QualityAndSafetyAgent"]
+    end
+
+    Plan --> A1 & A2 & A3 & A4 & A5 & A6 & A7 & A8 & A9
+    A1 & A2 & A3 & A4 & A5 & A6 & A7 & A8 & A9 --> Tools["Modular Tool Registry (15+ Validated Tools) + Optional MCP Adapters"]
+    Tools --> A10
+    A10 --> Store["Persistent Learner Memory (LocalLearningStore) & Offline Dashboard"]
 ```
 
 ---
 
-## Feature Comparison: Reference Claudemy vs. Stardi AI v2.0.0
+## 2. Key Capabilities
 
-| Capability | Reference Claudemy (`v0.3.2`) | Stardi AI Learning OS (`v2.0.0`) |
-| :--- | :--- | :--- |
-| **Agent Platform** | Claude Code only | **Google Antigravity** native (`.agents/AGENTS.md` + 12 skills) + Claude Code compatible |
-| **Course Modes** | 1 mode (12 x 2-min audio lessons) | **8 Modes**: `quick`, `mastery`, `exam`, `project`, `research`, `materials`, `expert`, `troubleshooting` |
-| **Research Modes** | Web + single author (Substack/RSS/Sitemap) | **7 Modes**: `general_web`, `academic`, `official_docs`, `expert_specific`, `user_sources`, `comparative`, `historical` + qualitative source evaluation & prompt-injection sanitization |
-| **Adaptive Tutoring** | Static script generation | **9 Teaching Styles** + **6-Step Re-Explanation Protocol** for `"I don't understand X"` + misconception tracking |
-| **Knowledge Graph** | None | **36-node Prerequisite & Dependency Graph** across CS, Networking, OS, DB, DSA, Python, Web, & Security + Mermaid export |
-| **Practical Coding Lab** | None | **Sandboxed Code Runner** (Python, SQL, JS, C/C++) + **3-Level Progressive Hints** before solution |
-| **Project Mentorship** | None | **12-Step Guided Project Mentor** with Mermaid architecture & code review checklists |
-| **Assessment Engine** | None | **MCQ, Short/Long Answer, Worked Math, Coding, Scenario, Viva, & Timed Mock Exams** + 6-criterion rubric |
-| **Memory & Revision** | Static `playbook.md` | **Persistent `LocalLearningStore`**, **SM-2 Spaced Repetition**, **Anki CSV Export**, & **Evidence-Based Mastery** |
-| **Documents & Repos** | Web HTML only | **PDF, DOCX, PPTX, IPYNB, MD, CSV, HTML, Source Code** + **GitHub/Local Repository AST Analyzer** |
-| **Academic Papers** | None | **12-Dimension Research Paper Analyst** + multi-paper comparison matrix (Claim vs. Interpretation) |
-| **Multilingual Support** | English only | **English (`en`) & Bangla (`bn`)** bilingual teaching preserving English technical terminology |
-| **Study Planner** | None | **Smart Study Planner** with dynamic recalculation & **RFC 5545 `.ics` Calendar Export** |
-| **Audio & Visuals** | ElevenLabs + macOS `say` | **ElevenLabs + macOS `say` + Windows SAPI (`System.Speech`) + Honest Text-Only Fallback** + **Mermaid Visual Studio** |
-| **Learning Dashboard** | None | **Markdown (`DASHBOARD.md`) & Standalone Offline HTML (`dashboard.html`)** |
+- **Central Multi-Agent Orchestrator**: Plans dependency-aware task DAGs, executes independent agents in parallel waves (`ThreadPoolExecutor`), enforces timeouts and retries, recovers gracefully from partial failures, and verifies every output via `QualityAndSafetyAgent`.
+- **10 Specialized Agents & Native Antigravity Skills (`.agents/skills/`)**:
+  1. `ResearchAgent` (`research-librarian`) — Multi-source discovery, qualitative evaluation, consensus vs. split comparison, strict citation verification.
+  2. `CurriculumArchitectAgent` (`curriculum-architect` / `course-architect`) — 36-node prerequisite DAGs, 8 course modes (`quick`, `mastery`, `exam`, `project`, `research`, `materials`, `expert`, `troubleshooting`), and `.ics` Smart Study Planner.
+  3. `PersonalTutorAgent` (`adaptive-tutor`) — 9 teaching styles, 8-step learning-state-aware adaptive re-explanation, Socratic questioning, and bilingual English/Bangla (`bn`) instruction.
+  4. `PracticalLabAgent` (`practical-learning-lab`) — Coding exercises in C, C++, Java, Python, JS, SQL, HTML, CSS with 3-level progressive hints (withholding solutions) and sandboxed test execution.
+  5. `AssessmentAgent` (`assessment-coach`) — MCQs, short/long questions, worked math proofs, viva questions, timed mock exams, and 6-criterion formative rubric grading.
+  6. `RevisionAgent` (`revision-coach`) — SuperMemo-2 (SM-2) flashcard scheduling, weak-concept tracking, and Anki CSV export.
+  7. `ResearchPaperAgent` (`research-paper-analyst`) — 12-dimension academic paper analysis and multi-paper methodology comparison.
+  8. `ProjectMentorAgent` (`project-mentor`) — 12-step project mentorship across Python, C/C++, Java, Django, Flutter, APIs, Databases, ML, and authorized Cybersecurity labs.
+  9. `KnowledgeManagerAgent` (`knowledge-manager` / `knowledge-librarian`) — Multi-format document ingestion (PDF, DOCX, PPTX, IPYNB, MD, CSV, HTML) with preserved citations + GitHub repository AST analysis.
+  10. `QualityAndSafetyAgent` (`quality-safety-guardian`) — Citation integrity checks, prompt-injection sanitization, and 5-tier Autonomy Permission enforcement (`LEVEL 0` to `LEVEL 4`).
+- **Model Context Protocol (MCP) & Optional Antigravity SDK Support**: Isolated MCP connectors (`stdio` and `streamable_http`) and dynamic runtime detection for `google-antigravity` (`google.antigravity`).
 
 ---
 
-## Quick Start & Installation
+## 3. Quick Start
 
-### 1. Prerequisites
-- **Python 3.10+** (`python --version`)
-- **`beautifulsoup4`** (`pip install beautifulsoup4`)
-- **Optional**: `ffmpeg` (for MP3 audio rendering), `pandoc` (for `.docx` card export), `gcc`/`clang`/`node` (for C/C++/JS sandbox compilation).
-
-### 2. Install on Windows PowerShell, Linux, or macOS
-
-**Windows PowerShell:**
 ```powershell
-pip install beautifulsoup4
+# 1. Clone and install
+git clone https://github.com/emon404x/agentic-learning-os.git
+cd agentic-learning-os
 pip install -e .
+
+# 2. Run the 10-Stage Multi-Agent Orchestrator
+python scripts/alos.py orchestrate "Research computer networking and create a structured course with reliable sources"
+
+# 3. Inspect specialized agents, tools, and MCP connectors
+python scripts/alos.py agents
+python scripts/alos.py tools
+python scripts/alos.py mcp
+
+# 4. Run all 74 automated unit, acceptance, and agentic architecture tests
 python -m unittest discover -s tests -v
 ```
 
-**Linux / macOS:**
-```bash
-pip3 install beautifulsoup4
-pip3 install -e .
-python3 -m unittest discover -s tests -v
-```
+---
 
-### 3. Using Inside Google Antigravity
-Open this repository in **Google Antigravity**. Antigravity automatically discovers:
-- Workspace rules in [`.agents/AGENTS.md`](./.agents/AGENTS.md)
-- All 12 skills in [`.agents/skills/`](./.agents/skills/)
+## 4. Documentation Index
 
-Simply ask in chat:
-- `"Teach me Python from zero."`
-- `"Teach me computer networking from beginner to advanced."`
-- `"I don't understand subnetting."`
-- `"Prepare me for my operating systems final exam."`
-- `"Teach me DSA using C."`
-- `"Teach me Django by making a library management system."`
-- `"Explain this GitHub repository to me."`
-- `"Teach me this research paper from beginner level."`
-- `"আমাকে বাংলায় রিকার্সন (Recursion) সহজভাবে শেখাও।"`
-- `"I want to learn Python in 30 days. I can study 2 hours every day."`
-
-### 4. CLI Usage Examples (`scripts/stardi.py`)
-```bash
-# Route any natural-language learning request
-python scripts/stardi.py route "Prepare me for my database final examination."
-
-# Generate a course blueprint (8 modes, English or Bangla)
-python scripts/stardi.py course "Computer Networking" --mode mastery --lang en
-python scripts/stardi.py course "Recursion" --mode quick --lang bn
-
-# Run 6-step adaptive re-explanation for a difficult concept
-python scripts/stardi.py tutor "I don't understand subnetting."
-
-# Practical coding lab with progressive hints (withholds solution until requested)
-python scripts/stardi.py lab "Teach me DSA using C" --language c
-python scripts/stardi.py lab "Teach me DSA using C" --language c --hint 1
-python scripts/stardi.py lab "python-two-sum" --language python --test-reference
-
-# Generate examination & mock test suite
-python scripts/stardi.py exam "Operating Systems" --difficulty intermediate
-
-# Generate 12-step guided project mentorship blueprint
-python scripts/stardi.py project "Library Management System in Django" --tech Django
-
-# Inspect a repository and generate a code-grounded learning roadmap
-python scripts/stardi.py repo .
-
-# Analyze a research paper across all 12 academic dimensions
-python scripts/stardi.py paper "Abstract: We propose the Transformer..." --level beginner
-
-# Create a 30-day Smart Study Plan and export an RFC 5545 .ics calendar file
-python scripts/stardi.py plan "Python" --days 30 --hours 2.0 --ics "./stardi_workspace/python_30d.ics"
-
-# Review due spaced-repetition flashcards & export Anki CSV
-python scripts/stardi.py revision --anki-out "./stardi_workspace/anki.csv"
-
-# Render Personal Learning Dashboard (Markdown + standalone offline HTML)
-python scripts/stardi.py dashboard
-```
+- [Agentic AI Architecture (`docs/AGENTIC_AI.md`)](docs/AGENTIC_AI.md)
+- [System Architecture (`docs/ARCHITECTURE.md`)](docs/ARCHITECTURE.md)
+- [Feature Reference (`docs/FEATURES.md`)](docs/FEATURES.md)
+- [Installation Guide (`docs/INSTALLATION.md`)](docs/INSTALLATION.md)
+- [Usage Guide (`docs/USAGE.md`)](docs/USAGE.md)
+- [Developer Guide (`docs/DEVELOPER_GUIDE.md`)](docs/DEVELOPER_GUIDE.md)
+- [Security & Autonomy Policy (`SECURITY.md`)](SECURITY.md)
+- [Attribution & Upstream Notices (`ATTRIBUTION.md`)](ATTRIBUTION.md)
+- [Third-Party Notices (`THIRD_PARTY_NOTICES.md`)](THIRD_PARTY_NOTICES.md)
 
 ---
 
-## Documentation Index
-- [Architecture Guide](./docs/ARCHITECTURE.md)
-- [Complete Feature Guide (Feature Sets A–P)](./docs/FEATURES.md)
-- [Setup & Installation Guide](./docs/SETUP.md)
-- [Developer Guide](./docs/DEVELOPER_GUIDE.md)
-- [Security Policy](./SECURITY.md)
-- [Open-Source Attribution & Lineage](./ATTRIBUTION.md)
-- [Changelog](./CHANGELOG.md)
+## 5. Maintainer & License
 
----
-
-## License & Attribution
-MIT Licensed. See [`LICENSE`](./LICENSE) and [`ATTRIBUTION.md`](./ATTRIBUTION.md) for full copyright notices and attribution to Assaf Kipnis's original [Claudemy](https://github.com/assafkip/claudemy) skill.
+- **Developer & Project Maintainer**: **Md. Aktaruzzaman Emon** ([@emon404x](https://github.com/emon404x))
+- **License**: MIT License — see [LICENSE](LICENSE), [ATTRIBUTION.md](ATTRIBUTION.md), and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for upstream attribution to Assaf Kipnis (`assafkip/claudemy`) for the preserved audio-course skill components.

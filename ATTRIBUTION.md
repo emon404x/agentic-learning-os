@@ -1,25 +1,34 @@
-# Open-Source Attribution & Lineage
+# Attribution & Intellectual Property Notice
 
-**Stardi AI Learning Operating System (`stardi-learning-engine` v2.0.0)** builds upon and acknowledges the open-source work of **Claudemy** (`v0.3.2`).
+## Project Ownership & Maintainership
+- **Project Name**: Agentic Learning OS
+- **Repository**: [https://github.com/emon404x/agentic-learning-os](https://github.com/emon404x/agentic-learning-os)
+- **Developer & Project Maintainer**: **Md. Aktaruzzaman Emon** ([@emon404x](https://github.com/emon404x))
+- **Tagline**: *Learn Anything. Build Everything. Master More.*
+- **Category**: Agentic AI / Education / Multi-Agent Systems
 
-## 1. Inherited & Adapted Components (MIT License)
-- **Original Project**: [assafkip/claudemy](https://github.com/assafkip/claudemy)
-- **Original Author**: Assaf Kipnis ([ASK Consulting](https://askconsulting.io))
-- **License**: MIT License (preserved in [`LICENSE`](./LICENSE))
-- **Retained / Adapted Files**:
-  - `skills/claudemy/` and `.agents/skills/claudemy/` (`scrape.py`, `check_lessons.py`, `render_audio.py`, `package_class.py`, and `references/*.md`), updated with Windows UTF-8 fixes, `.env` loading, and Windows SAPI (`System.Speech`) offline TTS support.
-  - `hooks/export_elevenlabs_key.py` and `tests/test_scripts.py` (original 41 regression tests preserved and extended).
-  - `docs/index.html`, `docs/privacy.html`, `docs/blog/citation-checker.html` (original static documentation pages).
+---
 
-## 2. Independent Architecture & New Contributions in Stardi AI v2.0.0
-All modules under `learning_engine/`, `scripts/stardi.py`, `schemas/`, `templates/`, `examples/`, and the 11 new Google Antigravity skills under `.agents/skills/` (`learn-anything`, `research-librarian`, `course-architect`, `adaptive-tutor`, `practical-learning-lab`, `assessment-coach`, `revision-coach`, `knowledge-librarian`, `research-paper-analyst`, `audio-visual-studio`, `project-mentor`) were independently designed and implemented for Stardi AI, including:
-- **Intent Router & 8-Mode Universal Course Generator** (`learning_engine.core.intent_router`, `learning_engine.curriculum.course_generator`)
-- **Knowledge Graph & Prerequisite Engine** (`learning_engine.curriculum.knowledge_graph`)
-- **6-Step Adaptive Re-Explanation Tutor & Bilingual (English/Bangla) Engine** (`learning_engine.tutoring.adaptive_tutor`, `learning_engine.core.i18n`)
-- **Practical Learning Lab & Sandboxed Code Runner** (`learning_engine.practical_lab.lab_engine`)
-- **12-Step Real Project Mentor** (`learning_engine.curriculum.project_mentor`)
-- **Multi-Criteria Assessment Engine** (`learning_engine.assessment.engine`)
-- **Evidence-Based Mastery Tracker & SM-2 Spaced Repetition / Anki Exporter** (`learning_engine.mastery.tracker`, `learning_engine.revision.scheduler`)
-- **Multi-Format Document Ingestor, Repository Analyzer, & 12-Part Academic Paper Analyst** (`learning_engine.documents.*`)
-- **Smart Study Planner with RFC 5545 `.ics` Calendar Export** (`learning_engine.curriculum.study_planner`)
-- **Audio/Visual Learning Studio & Personal Learning Dashboard** (`learning_engine.audio.studio`, `learning_engine.visualization.studio`, `learning_engine.core.dashboard`)
+## Separation of Original Upstream Authorship vs. Maintainer Contributions
+
+### 1. Inherited Upstream Components (`assafkip/claudemy`)
+- **Original Author**: Assaf Kipnis (ASK Consulting)
+- **Original Repository**: `https://github.com/assafkip/claudemy` (`v0.4.3`)
+- **License**: MIT License
+- **Inherited Paths**:
+  - `skills/claudemy/` (and its synchronized Antigravity copy `.agents/skills/claudemy/`), including `scrape.py`, `check_lessons.py`, `render_audio.py`, and `package_class.py`.
+  - `hooks/export_elevenlabs_key.py`
+  - `tests/test_scripts.py`
+- **Cross-Platform Enhancements Applied by Maintainer**:
+  - Added Windows UTF-8 console reconfiguration guards, `.env` credential loading without overwriting shell environment variables, Windows `System.Speech` SAPI offline TTS support, and LF line-ending preservation.
+
+### 2. Independently Engineered Components (`Agentic Learning OS` v2.0.0 – v3.0.0)
+- **Author & Maintainer**: **Md. Aktaruzzaman Emon** ([@emon404x](https://github.com/emon404x))
+- **License**: MIT License
+- **Independently Created Paths**:
+  - **Central Agentic Orchestrator & 10 Specialized Agents**: `learning_engine/src/learning_engine/agents/` (`orchestrator.py`, `specialists.py`, `permissions.py`)
+  - **Modular Agentic Tool Registry**: `learning_engine/src/learning_engine/tools/registry.py`
+  - **Model Context Protocol (MCP) & Antigravity SDK Adapters**: `learning_engine/src/learning_engine/mcp/adapters.py`, `mcp/mcp_config.example.json`
+  - **Core Learning Engine Subsystems**: `learning_engine/src/learning_engine/core/`, `curriculum/`, `research/`, `sources/`, `tutoring/`, `practical_lab/`, `assessment/`, `mastery/`, `revision/`, `documents/`, `audio/`, `visualization/`, `storage/`
+  - **Google Antigravity Native Skill Ecosystem**: `.agents/AGENTS.md` and `.agents/skills/` (`learn-anything`, `research-librarian`, `curriculum-architect`, `course-architect`, `adaptive-tutor`, `practical-learning-lab`, `project-mentor`, `assessment-coach`, `revision-coach`, `knowledge-manager`, `knowledge-librarian`, `research-paper-analyst`, `quality-safety-guardian`, `audio-visual-studio`)
+  - **Unified CLIs, Schemas, Templates & Acceptance Suites**: `scripts/alos.py`, `scripts/stardi.py`, `schemas/`, `templates/`, `learning_engine/tests/test_acceptance_suite.py`, `learning_engine/tests/test_agentic_architecture.py`

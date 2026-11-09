@@ -119,6 +119,10 @@ class LocalLearningStore:
 
     # --- Course & Lesson Progress ---
 
+    def list_courses(self) -> dict[str, Any]:
+        """Return all registered courses from local state."""
+        return self.load_state().get("courses", {})
+
     def register_course(self, course_dict: dict[str, Any]) -> Path:
         slug = course_dict["slug"]
         cdir = self.courses_dir / slug

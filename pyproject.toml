@@ -3,35 +3,60 @@ requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "stardi-learning-engine"
-version = "2.0.0"
-description = "Stardi AI Learning Operating System: Modular AI-native learning, research, practical lab, assessment, and spaced-repetition engine for Google Antigravity."
+name = "agentic-learning-os"
+version = "3.0.0"
+description = "Agentic Learning OS — Learn Anything. Build Everything. Master More. A multi-agent AI Learning Operating System for Google Antigravity."
 readme = "README.md"
-license = {text = "MIT"}
+license = { file = "LICENSE" }
 requires-python = ">=3.10"
 authors = [
-    {name = "Stardi AI Contributors"},
+  { name = "Md. Aktaruzzaman Emon", email = "emon404x@users.noreply.github.com" },
+]
+maintainers = [
+  { name = "Md. Aktaruzzaman Emon", email = "emon404x@users.noreply.github.com" },
 ]
 keywords = [
-    "antigravity",
-    "agent-skills",
-    "ai-tutor",
-    "education-technology",
-    "spaced-repetition",
-    "microlearning",
-    "research-assistant",
-    "coding-lab",
+  "agentic-ai",
+  "multi-agent-systems",
+  "education",
+  "google-antigravity",
+  "agent-skills",
+  "mcp",
+  "spaced-repetition",
+  "adaptive-tutor",
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Education",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Education",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
-    "beautifulsoup4>=4.12.0",
+  "beautifulsoup4>=4.12.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=7.0",
+  "pytest>=7.0",
 ]
 
+[project.urls]
+Homepage = "https://github.com/emon404x/agentic-learning-os"
+Repository = "https://github.com/emon404x/agentic-learning-os"
+Issues = "https://github.com/emon404x/agentic-learning-os/issues"
+Maintainer = "https://github.com/emon404x"
+
 [project.scripts]
+alos = "learning_engine.cli:main"
 stardi = "learning_engine.cli:main"
 
 [tool.setuptools.packages.find]

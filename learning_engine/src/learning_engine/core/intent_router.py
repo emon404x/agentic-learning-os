@@ -154,7 +154,23 @@ def classify_learning_request(
             high_stakes_domain=high_stakes,
         )
 
-    # 4. Examination Preparation / Assessment / Revision ("final exam", "test my knowledge", "mock exam", "viva", "learned last week")
+    # 4. Revision / Resume Previous Course ("continue my previous", "learned last week", "weak areas")
+    if any(p in q for p in ("continue my previous", "previous course", "learned last week", "weak areas", "flashcard", "spaced repetition")):
+        return LearningIntent(
+            raw_query=query,
+            topic=topic,
+            course_mode=CourseMode.MASTERY.value,
+            research_mode=ResearchMode.USER_SOURCES.value,
+            teaching_style=TeachingStyle.SIMPLE.value,
+            level=level,
+            language=lang,
+            primary_skill="revision-coach",
+            supporting_skills=["adaptive-tutor", "assessment-coach"],
+            programming_language=prog_lang,
+            high_stakes_domain=high_stakes,
+        )
+
+    # 4b. Examination Preparation / Assessment ("final exam", "test my knowledge", "mock exam", "viva")
     if any(p in q for p in ("exam", "examination", "viva", "quiz me", "test my knowledge", "test me on", "mock test")):
         is_revision = any(p in q for p in ("last week", "previous", "revision", "review what i learned", "flashcard"))
         primary = "revision-coach" if is_revision else "assessment-coach"
@@ -206,7 +222,7 @@ def classify_learning_request(
         )
 
     # 7. Practical Lab / Hands-on Exercises ("with practical exercises", "using C", "coding lab", "dsa using")
-    if any(p in q for p in ("practical exercises", "hands-on", "using c", "coding lab", "practice problems")):
+    if any(p in q for p in ("practical exercises", "practical coding", "hands-on", "using c", "coding lab", "practice problems")):
         return LearningIntent(
             raw_query=query,
             topic=topic,

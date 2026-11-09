@@ -199,6 +199,13 @@ def analyze_repository(repo_path: str | Path, max_files: int = 200) -> dict[str,
             }
         )
 
+    mermaid_lines = [
+        "flowchart TD",
+        f'    Repo["{root.name}"] --> Entry["Entry Points ({len(entry_points)})"]',
+        f'    Entry --> Core["Core Modules ({len(important_files)})"]',
+        '    Core --> Tests["Automated Verification Suite"]',
+    ]
+
     return {
         "status": "ok",
         "repository_name": root.name,
@@ -208,6 +215,7 @@ def analyze_repository(repo_path: str | Path, max_files: int = 200) -> dict[str,
         "dependencies": deps,
         "entry_points": entry_points,
         "important_files": important_files,
+        "architecture_mermaid": "\n".join(mermaid_lines),
         "learning_roadmap": roadmap,
         "code_grounded_exercises": exercises,
     }

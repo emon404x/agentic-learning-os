@@ -1,44 +1,59 @@
 #!/usr/bin/env python3
-"""End-to-end demonstration of Stardi AI Learning Operating System workflows."""
+"""End-to-End Demo Walkthrough for Agentic Learning OS (`v3.0.0`).
 
+Maintainer: Md. Aktaruzzaman Emon (@emon404x)
+Demonstrates:
+1. Central 10-Stage Multi-Agent Orchestration (`LearningOrchestrator`)
+2. 10 Specialized Agents & Modular Tool Registry
+3. 8-Step State-Aware Adaptive Tutoring (English & Bangla)
+4. Practical Coding Lab in C with Progressive Hints
+5. Personal Learning Dashboard Generation
+"""
+
+from __future__ import annotations
+
+import shutil
 import sys
 import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "learning_engine" / "src"))
+SRC = ROOT / "learning_engine" / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
 
-from learning_engine.core.dashboard import render_dashboard_markdown  # noqa: E402
-from learning_engine.core.intent_router import classify_learning_request  # noqa: E402
-from learning_engine.curriculum.course_generator import generate_course_blueprint  # noqa: E402
-from learning_engine.practical_lab.lab_engine import create_coding_exercise, run_exercise_tests  # noqa: E402
-from learning_engine.storage.store import LocalLearningStore  # noqa: E402
-from learning_engine.tutoring.adaptive_tutor import generate_adaptive_reexplanation  # noqa: E402
+from learning_engine.agents import LearningOrchestrator
+from learning_engine.core.dashboard import render_dashboard_markdown
+from learning_engine.practical_lab.lab_engine import create_coding_exercise, get_progressive_hint
+from learning_engine.storage.store import LocalLearningStore
+from learning_engine.tutoring.adaptive_tutor import generate_adaptive_reexplanation
 
 
-def main() -> None:
-    with tempfile.TemporaryDirectory() as td:
-        store = LocalLearningStore(td)
-        intent = classify_learning_request("Teach me computer networking from beginner to advanced.")
-        print(f"1. Routed Intent -> mode={intent.course_mode}, primary_skill={intent.primary_skill}")
+def main() -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-        bp = generate_course_blueprint(intent.topic, mode=intent.course_mode, level=intent.level)
-        store.register_course(bp)
-        print(f"2. Generated Course -> {bp['title']} ({len(bp['lessons'])} lessons)")
+    tmp = Path(tempfile.mkdtemp(prefix="alos_demo_"))
+    try:
+        store = LocalLearningStore(tmp)
+        orch = LearningOrchestrator(store=store)
 
-        reexp = generate_adaptive_reexplanation("I don't understand subnetting.")
-        print(f"3. Adaptive Re-Explanation -> {reexp['step_1_identify_difficult_part'][:80]}...")
+        res = orch.execute_goal("Research computer networking and create a structured course with reliable sources.")
+        print(f"1. 10-Stage Orchestrator -> status={res.status}, stages={len(res.stages_completed)}, agents_used={len(res.agent_reports)}")
 
-        ex = create_coding_exercise("Teach me DSA using C", language="c")
-        print(f"4. Practical Lab -> {ex.title} (Language={ex.language})")
+        tutor = generate_adaptive_reexplanation("I don't understand subnetting", style="simple", language="bn")
+        print(f"2. 8-Step Adaptive Tutor (bn) -> steps={len(tutor['eight_step_protocol'])}, concept={tutor['concept_id']}")
 
-        py_ex = create_coding_exercise("python-two-sum", language="python")
-        test_res = run_exercise_tests(py_ex, py_ex.solution_code)
-        print(f"5. Sandboxed Code Execution -> passed={test_res['passed']}")
+        lab = create_coding_exercise("Teach me DSA using C", language="c")
+        hint1 = get_progressive_hint(lab, level=1, reveal_solution=False)
+        print(f"3. Practical Lab (C) -> title={lab.title}, stage={hint1['stage']}, solution_withheld={hint1['solution_code'] is None}")
 
-        dash = render_dashboard_markdown(store)
-        print(f"6. Dashboard Generated -> {len(dash.splitlines())} lines")
+        dash_md = render_dashboard_markdown(store)
+        print(f"4. Dashboard Generated -> {len(dash_md.splitlines())} lines")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
