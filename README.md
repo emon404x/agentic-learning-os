@@ -1,3 +1,7 @@
+<p align="center">
+  <img src=".github/assets/banner.svg" alt="Agentic Learning OS Banner" width="100%">
+</p>
+
 # Agentic Learning OS (`v3.0.0`)
 
 > **Learn Anything. Build Everything. Master More.**  
