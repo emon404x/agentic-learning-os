@@ -12,7 +12,7 @@
 
 1. **Native Google Antigravity Agent Skills Layer (`.agents/`)**:
    - Workspace rules in [`.agents/AGENTS.md`](../.agents/AGENTS.md).
-   - 14 skill modules under `.agents/skills/` (`learn-anything`, `research-librarian`, `curriculum-architect`, `course-architect`, `adaptive-tutor`, `practical-learning-lab`, `project-mentor`, `assessment-coach`, `revision-coach`, `knowledge-manager`, `knowledge-librarian`, `research-paper-analyst`, `quality-safety-guardian`, `audio-visual-studio`, and `claudemy`).
+   - 15 skill modules under `.agents/skills/` (`learn-anything`, `research-librarian`, `curriculum-architect`, `course-architect`, `adaptive-tutor`, `practical-learning-lab`, `project-mentor`, `assessment-coach`, `revision-coach`, `knowledge-manager`, `knowledge-librarian`, `research-paper-analyst`, `quality-safety-guardian`, `audio-visual-studio`, and `claudemy`).
 2. **Programmatic Agentic Orchestration & Permission Layer (`learning_engine/src/learning_engine/agents/`)**:
    - [`LearningOrchestrator`](../learning_engine/src/learning_engine/agents/orchestrator.py): Executes the 10-stage loop (`UNDERSTAND -> PLAN -> SELECT_AGENTS -> SELECT_TOOLS -> EXECUTE -> OBSERVE -> VERIFY -> REFLECT -> SAVE_PROGRESS -> RESPOND`).
    - [`specialists.py`](../learning_engine/src/learning_engine/agents/specialists.py): 10 specialized agents with isolated tool allowlists.

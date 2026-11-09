@@ -15,8 +15,9 @@ All agents and tools are governed by [`PermissionGuard`](learning_engine/src/lea
 
 ## 2. Built-In Technical Safeguards
 1. **Prompt-Injection Defense**: Scraped web pages and uploaded documents are sanitized via `sanitize_untrusted_text()` before reaching agent context.
-2. **SSRF & Scheme Protection**: `validate_safe_url()` blocks `file://`, `javascript:`, loopback (`localhost`, `127.0.0.1`), RFC 1918 private networks, and cloud metadata IPs (`169.254.169.254`).
+2. **SSRF & Scheme Protection**: `validate_safe_url()` blocks `file://`, `javascript:`, embedded URL credentials, IPv4/IPv6 loopback (`localhost`, `127.0.0.1/8`, `::1`, `::ffff:127.0.0.1`), RFC 1918 private networks, link-local and cloud metadata IPs (`169.254.169.254`, `fe80::/10`), and `.local`/`.internal` hostnames.
 3. **Workspace Path Confinement**: `resolve_safe_workspace_path()` blocks `../` path traversal outside the workspace directory.
-4. **Loop & Resource Protection**: `PermissionGuard` enforces `max_tool_calls`, duplicate `(actor, tool, args)` loop detection (`AgentLoopError`), and `CancellationToken` deadlines.
-5. **Secret Redaction**: Tool outputs and error logs are scrubbed via `redact_secrets()`.
-6. **High-Stakes Disclaimers**: Automatic educational/authorized-lab disclaimers for cybersecurity, medical, legal, and financial topics.
+4. **Practical Lab Process-Level Isolation & Static/AST Guards**: `PracticalLabEngine` enforces a Python AST whitelist/denylist (blocking `os`, `subprocess`, `socket`, `urllib`, `eval`, `exec`, `open`, `__import__`, and dunder escapes), dangerous pattern checks for C/C++/Java/JS/SQL, temporary-directory execution (`cwd=tmp`), and secret-stripped child environment variables (`_build_sanitized_subprocess_env()`). *Security Boundary Notice*: This runner is a process-level temporary-directory test harness with static/AST guards, not a kernel container, chroot jail, or hardware VM.
+5. **Loop & Resource Protection**: `PermissionGuard` enforces `max_tool_calls`, duplicate `(actor, tool, args)` loop detection (`AgentLoopError`), and `CancellationToken` deadlines.
+6. **Secret Redaction**: Tool outputs and error logs are scrubbed via `redact_secrets()`.
+7. **High-Stakes Disclaimers**: Automatic educational/authorized-lab disclaimers for cybersecurity, medical, legal, and financial topics.

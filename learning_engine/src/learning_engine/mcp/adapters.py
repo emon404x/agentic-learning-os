@@ -74,7 +74,10 @@ class MCPAdapterRegistry:
 
     def __init__(self, permission_guard: PermissionGuard | None = None) -> None:
         self._servers: dict[str, MCPServerConfig] = {}
-        self.permission_guard = permission_guard
+        self.permission_guard = permission_guard or PermissionGuard(
+            workspace_root="./stardi_workspace",
+            max_autonomy_level=AutonomyLevel.LEVEL_2_REVERSIBLE,
+        )
 
     def register_server(self, config: MCPServerConfig) -> None:
         if not config.trusted:
@@ -116,12 +119,17 @@ class MCPAdapterRegistry:
 
         cfg = self._servers[server_id]
         active_guard = guard or self.permission_guard
+        effective_level = (
+            max(cfg.required_autonomy, AutonomyLevel.LEVEL_3_APPROVAL_REQUIRED)
+            if (cfg.enabled and cfg.transport == MCPTransportType.STREAMABLE_HTTP)
+            else cfg.required_autonomy
+        )
 
         if active_guard is not None:
             active_guard.authorize(
                 actor=actor,
                 operation=f"mcp:{server_id}:{tool_name}",
-                required_level=cfg.required_autonomy,
+                required_level=effective_level,
                 metadata={"data_shared_policy": cfg.data_shared_policy, "enabled": cfg.enabled},
             )
 
@@ -167,7 +175,7 @@ def create_default_mcp_registry(permission_guard: PermissionGuard | None = None)
             transport=MCPTransportType.STREAMABLE_HTTP,
             url="https://mcp.example.org/official-docs/mcp",
             description="Official language and framework documentation lookup connector.",
-            data_shared_policy="Sends library name, version, and symbol query only.",
+            data_shared_policy="Sends library name, version, and symbol query only when enabled; offline fallback transmits zero data.",
             required_autonomy=AutonomyLevel.LEVEL_0_READ,
         ),
         MCPServerConfig(

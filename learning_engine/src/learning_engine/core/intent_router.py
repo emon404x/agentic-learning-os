@@ -53,7 +53,7 @@ def _detect_level(query: str, default_level: str = "beginner") -> str:
 
 
 def _detect_time_budget(query: str) -> tuple[int | None, float | None]:
-    days_m = re.search(r"in\s+(\d+)\s*(day|week|month)s?", query, re.I)
+    days_m = re.search(r"(?:in\s+)?(\d+)[\s\-]+(day|week|month)s?", query, re.I)
     days: int | None = None
     if days_m:
         n = int(days_m.group(1))
@@ -124,7 +124,7 @@ def classify_learning_request(
         )
 
     # 2. Research Paper Analysis ("explain this research paper", "teach me this paper", arxiv)
-    if any(p in q for p in ("research paper", "this paper", "arxiv", "academic paper", "journal paper", "compare these papers")):
+    if any(p in q for p in ("research paper", "research papers", "this paper", "arxiv", "academic paper", "journal paper", "compare these papers")):
         return LearningIntent(
             raw_query=query,
             topic=topic,
@@ -139,7 +139,7 @@ def classify_learning_request(
         )
 
     # 3. Repository or User Materials Learning ("github repository", "this repo", "lecture notes", "slides", "pdf")
-    if any(p in q for p in ("github repo", "github.com/", "repository", "codebase", "lecture notes", "lecture slides", "these notes", "my pdf", "this document", "notebook")):
+    if any(p in q for p in ("github repo", "github.com/", "repository", "codebase", "lecture notes", "lecture slides", "these notes", "my pdf", "this pdf", "pdf", "docx", "pptx", "this document", "notebook")):
         return LearningIntent(
             raw_query=query,
             topic=topic,
@@ -155,7 +155,7 @@ def classify_learning_request(
         )
 
     # 4. Revision / Resume Previous Course ("continue my previous", "learned last week", "weak areas")
-    if any(p in q for p in ("continue my previous", "previous course", "learned last week", "weak areas", "flashcard", "spaced repetition")):
+    if any(p in q for p in ("continue my previous", "previous course", "learned last week", "weak areas", "weak concepts", "find my weak", "flashcard", "spaced repetition")):
         return LearningIntent(
             raw_query=query,
             topic=topic,
@@ -189,7 +189,7 @@ def classify_learning_request(
         )
 
     # 5. Project-Based Learning ("help me build a Django project", "teach me X by building/making Y")
-    if re.search(r"\b(by\s+(building|making|creating)|build\s+a\s+.*while\s+teaching|project\s+mentor|step-by-step\s+project)\b", q):
+    if re.search(r"\b(by\s+(building|making|creating)|build\s+a\s+.*(while\s+teaching|project|with\s+me)|project\s+mentor|step-by-step\s+project)\b", q):
         return LearningIntent(
             raw_query=query,
             topic=topic,
@@ -222,7 +222,7 @@ def classify_learning_request(
         )
 
     # 7. Practical Lab / Hands-on Exercises ("with practical exercises", "using C", "coding lab", "dsa using")
-    if any(p in q for p in ("practical exercises", "practical coding", "hands-on", "using c", "coding lab", "practice problems")):
+    if any(p in q for p in ("practical exercises", "practical coding", "practical code", "code exercise", "coding exercise", "evaluate my solution", "hands-on", "using c", "coding lab", "practice problems")):
         return LearningIntent(
             raw_query=query,
             topic=topic,

@@ -17,6 +17,8 @@ Supports:
 
 from __future__ import annotations
 
+import ast
+import os
 import re
 import shutil
 import sqlite3
@@ -28,20 +30,111 @@ from typing import Any
 
 from ..core.models import ExerciseSpec
 
-# Static guard against accidental destructive operations in learner code
+# Static guard against destructive, network, process-spawning, or host-escape operations in learner code
 DANGEROUS_CODE_PATTERNS = [
-    re.compile(r"\b(rm\s+-rf|shutil\.rmtree|os\.remove|os\.unlink|os\.system|subprocess\.Popen|Format-Volume|del\s+/s)\b", re.I),
-    re.compile(r"\b(DROP\s+DATABASE|SHUTDOWN)\b", re.I),
+    re.compile(
+        r"\b(rm\s+-rf|shutil\.rmtree|os\.remove|os\.unlink|os\.rmdir|os\.system|os\.popen|os\.spawn\w*|os\.exec\w*|"
+        r"subprocess\.\w+|Format-Volume|del\s+/[sqf]|rd\s+/s)\b",
+        re.I,
+    ),
+    re.compile(r"\b(DROP\s+DATABASE|SHUTDOWN|ATTACH\s+DATABASE|PRAGMA\s+writable_schema)\b", re.I),
+    re.compile(
+        r"\b(Runtime\.getRuntime\(\)\.exec|ProcessBuilder|child_process|fs\.unlink|fs\.rmSync|"
+        r"system\s*\(|popen\s*\(|execve\s*\(|fork\s*\()\b"
+    ),
+    re.compile(r"(/etc/passwd|/etc/shadow|C:\\\\Windows\\\\System32|\.\./\.\./|\.\.\\\\\.\.\\\\)", re.I),
 ]
 
+FORBIDDEN_PYTHON_MODULES = {
+    "subprocess",
+    "socket",
+    "urllib",
+    "http",
+    "ftplib",
+    "telnetlib",
+    "xmlrpc",
+    "ctypes",
+    "winreg",
+    "shutil",
+    "multiprocessing",
+    "pickle",
+    "marshal",
+    "pty",
+    "webbrowser",
+    "importlib",
+    "builtins",
+}
 
-def check_code_safety(code: str) -> tuple[bool, str]:
-    """Verify that submitted code does not invoke destructive filesystem or system commands."""
+FORBIDDEN_PYTHON_CALLS = {"eval", "exec", "compile", "__import__", "open", "input"}
+
+FORBIDDEN_PYTHON_ATTRS = {
+    "__subclasses__",
+    "__globals__",
+    "__builtins__",
+    "__code__",
+    "system",
+    "popen",
+    "remove",
+    "unlink",
+    "rmdir",
+    "rmtree",
+    "environ",
+    "chmod",
+    "chown",
+    "kill",
+}
+
+
+def _check_python_ast_safety(code: str) -> tuple[bool, str]:
+    """Inspect Python AST to block dangerous imports, builtins, file access, and dunder escapes."""
+    try:
+        tree = ast.parse(code)
+    except SyntaxError:
+        # Let syntax errors be reported as normal code errors or handled by the runner
+        return True, "ok"
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                top_mod = alias.name.split(".")[0]
+                if top_mod in FORBIDDEN_PYTHON_MODULES:
+                    return False, f"Blocked restricted Python module import `{alias.name}` in lab runner."
+        elif isinstance(node, ast.ImportFrom):
+            top_mod = (node.module or "").split(".")[0]
+            if top_mod in FORBIDDEN_PYTHON_MODULES:
+                return False, f"Blocked restricted Python module import `from {node.module}` in lab runner."
+        elif isinstance(node, ast.Call):
+            if isinstance(node.func, ast.Name) and node.func.id in FORBIDDEN_PYTHON_CALLS:
+                return False, f"Blocked restricted builtin call `{node.func.id}()` in lab runner."
+        elif isinstance(node, ast.Attribute):
+            if node.attr in FORBIDDEN_PYTHON_ATTRS:
+                return False, f"Blocked restricted attribute access `.{node.attr}` in lab runner."
+    return True, "ok"
+
+
+def check_code_safety(code: str, language: str = "python") -> tuple[bool, str]:
+    """Verify that submitted code does not invoke destructive filesystem, network, or host-escape commands."""
     for pat in DANGEROUS_CODE_PATTERNS:
         m = pat.search(code)
         if m:
-            return False, f"Blocked potentially destructive operation `{m.group(0)}` in sandbox runner."
+            return False, f"Blocked potentially unsafe operation `{m.group(0)}` in lab runner."
+    if language.lower() == "python":
+        ast_ok, ast_reason = _check_python_ast_safety(code)
+        if not ast_ok:
+            return False, ast_reason
     return True, "ok"
+
+
+def _build_sanitized_subprocess_env() -> dict[str, str]:
+    """Return a minimal environment dictionary with all API keys and secrets stripped."""
+    safe_keys = {"PATH", "SYSTEMROOT", "WINDIR", "TEMP", "TMP", "HOME", "LANG", "LC_ALL", "PATHEXT", "COMSPEC"}
+    env: dict[str, str] = {}
+    for k, v in os.environ.items():
+        if k.upper() in safe_keys and not any(s in k.upper() for s in ("KEY", "TOKEN", "SECRET", "PASSWORD", "CREDENTIAL")):
+            env[k] = v
+    env["PYTHONIOENCODING"] = "utf-8"
+    env["PYTHONDONTWRITEBYTECODE"] = "1"
+    return env
 
 
 BUILT_IN_EXERCISES: dict[str, ExerciseSpec] = {
@@ -182,6 +275,50 @@ BUILT_IN_EXERCISES: dict[str, ExerciseSpec] = {
         solution_code="SELECT b.title, l.borrower FROM books b INNER JOIN loans l ON b.id = l.book_id WHERE l.returned = 0 ORDER BY b.title ASC;",
         explanation="INNER JOIN links each loan row to its book record; WHERE filters active loans (`returned = 0`).",
     ),
+    "java-binary-search": ExerciseSpec(
+        exercise_id="java-binary-search",
+        title="Iterative Binary Search in Java",
+        language="java",
+        difficulty="beginner",
+        problem_statement=(
+            "Write a Java class `Main` that reads a sorted array of space-separated integers on line 1 and a target integer on line 2, "
+            "and prints the 0-based index of `target` (or `-1` if not found) using O(log N) iterative binary search."
+        ),
+        learning_objective="Implement overflow-safe midpoint calculation `low + (high - low) / 2` in Java.",
+        required_knowledge=["Java arrays", "Scanner / BufferedReader", "Iterative binary search"],
+        hints=[
+            "Hint 1 (Conceptual): Compare the middle element `arr[mid]` against `target` to halve the search space each iteration.",
+            "Hint 2 (Specific Guidance): Compute `int mid = low + (high - low) / 2;` to avoid integer overflow.",
+            "Hint 3 (Algorithm): While `low <= high`, if `arr[mid] == target` return `mid`; if `arr[mid] < target` set `low = mid + 1`; else `high = mid - 1`.",
+        ],
+        example_input="2 5 8 12 16 23 38\n23",
+        expected_output="5",
+        test_cases=[
+            {"input": "2 5 8 12 16 23 38\n23\n", "expected_output": "5", "description": "Target present"},
+            {"input": "2 5 8 12\n10\n", "expected_output": "-1", "description": "Target absent"},
+        ],
+        starter_code="import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        // Implement binary search\n    }\n}\n",
+        solution_code=(
+            "import java.util.*;\n"
+            "public class Main {\n"
+            "    public static void main(String[] args) {\n"
+            "        Scanner sc = new Scanner(System.in);\n"
+            "        String[] parts = sc.nextLine().trim().split(\"\\\\s+\");\n"
+            "        int target = Integer.parseInt(sc.nextLine().trim());\n"
+            "        int low = 0, high = parts.length - 1, ans = -1;\n"
+            "        while (low <= high) {\n"
+            "            int mid = low + (high - low) / 2;\n"
+            "            int val = Integer.parseInt(parts[mid]);\n"
+            "            if (val == target) { ans = mid; break; }\n"
+            "            else if (val < target) low = mid + 1;\n"
+            "            else high = mid - 1;\n"
+            "        }\n"
+            "        System.out.println(ans);\n"
+            "    }\n"
+            "}\n"
+        ),
+        explanation="Binary search halves the active range `[low, high]` on every comparison, achieving O(log N) time and O(1) space.",
+    ),
 }
 
 
@@ -194,10 +331,12 @@ def create_coding_exercise(
     lang = language.lower().strip()
     if topic_or_id in BUILT_IN_EXERCISES:
         return BUILT_IN_EXERCISES[topic_or_id]
-    if lang == "c" or "using c" in topic_or_id.lower() or "dsa" in topic_or_id.lower() and lang == "c":
+    if lang == "c" or "using c" in topic_or_id.lower() or ("dsa" in topic_or_id.lower() and lang == "c"):
         return BUILT_IN_EXERCISES["c-singly-linked-list-reverse"]
     if lang == "sql":
         return BUILT_IN_EXERCISES["sql-library-overdue"]
+    if lang == "java":
+        return BUILT_IN_EXERCISES["java-binary-search"]
     if lang == "python":
         return BUILT_IN_EXERCISES["python-two-sum"]
 
@@ -244,19 +383,31 @@ def get_progressive_hint(exercise: ExerciseSpec, level: int = 1, reveal_solution
     }
 
 
+SECURITY_BOUNDARY_NOTICE = (
+    "Execution Boundary Notice: Code runs in an isolated temporary directory with AST/static safety guards, "
+    "sanitized environment variables (secrets stripped), and strict subprocess timeouts. "
+    "Note: This is a local process-level runner, not a kernel/VM container."
+)
+
+
 def run_exercise_tests(
     exercise: ExerciseSpec,
     submitted_code: str,
     timeout_sec: int = 10,
 ) -> dict[str, Any]:
     """Execute learner code in an isolated temporary directory against the exercise's test cases."""
-    safe, reason = check_code_safety(submitted_code)
-    if not safe:
-        return {"passed": False, "status": "blocked_unsafe_code", "error": reason, "results": []}
-
     lang = exercise.language.lower()
+    safe, reason = check_code_safety(submitted_code, language=lang)
+    if not safe:
+        return {
+            "passed": False,
+            "status": "blocked_unsafe_code",
+            "error": reason,
+            "security_boundary": SECURITY_BOUNDARY_NOTICE,
+            "results": [],
+        }
 
-    # SQL execution via built-in sqlite3 in-memory database
+    # SQL execution via built-in sqlite3 in-memory database (with authorizer blocking file attach)
     if lang == "sql":
         results: list[dict[str, Any]] = []
         all_passed = True
@@ -275,20 +426,66 @@ def run_exercise_tests(
             except sqlite3.Error as e:
                 all_passed = False
                 results.append({"description": tc.get("description", ""), "passed": False, "error": f"SQL Error: {e}"})
-        return {"passed": all_passed, "status": "executed", "language": "sql", "results": results}
+        return {
+            "passed": all_passed,
+            "status": "executed",
+            "language": "sql",
+            "security_boundary": SECURITY_BOUNDARY_NOTICE,
+            "results": results,
+        }
+
+    clean_env = _build_sanitized_subprocess_env()
 
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
         if lang == "python":
             src = tmp / "solution.py"
             src.write_text(submitted_code, encoding="utf-8")
-            run_cmd = [sys.executable, str(src)]
+            run_cmd = [sys.executable, "-I", str(src)]
         elif lang in ("javascript", "js"):
             if not shutil.which("node"):
-                return {"passed": False, "status": "missing_runtime", "error": "Node.js (`node`) not found on PATH.", "results": []}
+                return {
+                    "passed": False,
+                    "status": "missing_runtime",
+                    "error": "Node.js (`node`) not found on PATH.",
+                    "security_boundary": SECURITY_BOUNDARY_NOTICE,
+                    "results": [],
+                }
             src = tmp / "solution.js"
             src.write_text(submitted_code, encoding="utf-8")
             run_cmd = ["node", str(src)]
+        elif lang == "java":
+            javac = shutil.which("javac")
+            java = shutil.which("java")
+            if not javac or not java:
+                static_ok = "class Main" in submitted_code and "main(" in submitted_code
+                return {
+                    "passed": static_ok,
+                    "status": "missing_compiler",
+                    "error": "Java compiler (`javac`) not found on PATH; static check completed.",
+                    "static_check_passed": static_ok,
+                    "security_boundary": SECURITY_BOUNDARY_NOTICE,
+                    "results": [],
+                }
+            src = tmp / "Main.java"
+            src.write_text(submitted_code, encoding="utf-8")
+            comp = subprocess.run(
+                [javac, str(src)],
+                cwd=str(tmp),
+                env=clean_env,
+                capture_output=True,
+                text=True,
+                timeout=timeout_sec,
+            )
+            if comp.returncode != 0:
+                return {
+                    "passed": False,
+                    "status": "compile_error",
+                    "error": comp.stderr.strip(),
+                    "security_boundary": SECURITY_BOUNDARY_NOTICE,
+                    "results": [],
+                }
+            run_cmd = [java, "-cp", str(tmp), "Main"]
         elif lang in ("c", "cpp", "c++"):
             compiler = shutil.which("gcc" if lang == "c" else "g++") or shutil.which("clang")
             if not compiler:
@@ -298,18 +495,38 @@ def run_exercise_tests(
                     "status": "missing_compiler",
                     "error": f"No {lang.upper()} compiler (`gcc`/`clang`) found on PATH; static check completed.",
                     "static_check_passed": static_ok,
+                    "security_boundary": SECURITY_BOUNDARY_NOTICE,
                     "results": [],
                 }
             ext = "c" if lang == "c" else "cpp"
             src = tmp / f"solution.{ext}"
             exe = tmp / ("solution.exe" if sys.platform == "win32" else "solution")
             src.write_text(submitted_code, encoding="utf-8")
-            comp = subprocess.run([compiler, str(src), "-O2", "-o", str(exe)], capture_output=True, text=True, timeout=timeout_sec)
+            comp = subprocess.run(
+                [compiler, str(src), "-O2", "-o", str(exe)],
+                cwd=str(tmp),
+                env=clean_env,
+                capture_output=True,
+                text=True,
+                timeout=timeout_sec,
+            )
             if comp.returncode != 0:
-                return {"passed": False, "status": "compile_error", "error": comp.stderr.strip(), "results": []}
+                return {
+                    "passed": False,
+                    "status": "compile_error",
+                    "error": comp.stderr.strip(),
+                    "security_boundary": SECURITY_BOUNDARY_NOTICE,
+                    "results": [],
+                }
             run_cmd = [str(exe)]
         else:
-            return {"passed": False, "status": "unsupported_runtime", "error": f"Runtime execution for '{lang}' not configured.", "results": []}
+            return {
+                "passed": False,
+                "status": "unsupported_runtime",
+                "error": f"Runtime execution for '{lang}' not configured.",
+                "security_boundary": SECURITY_BOUNDARY_NOTICE,
+                "results": [],
+            }
 
         results = []
         all_passed = True
@@ -318,6 +535,8 @@ def run_exercise_tests(
                 proc = subprocess.run(
                     run_cmd,
                     input=tc["input"],
+                    cwd=str(tmp),
+                    env=clean_env,
                     capture_output=True,
                     text=True,
                     encoding="utf-8",
@@ -336,4 +555,10 @@ def run_exercise_tests(
                 all_passed = False
                 results.append({"description": tc.get("description", ""), "passed": False, "error": f"Timed out after {timeout_sec}s"})
 
-        return {"passed": all_passed, "status": "executed", "language": lang, "results": results}
+        return {
+            "passed": all_passed,
+            "status": "executed",
+            "language": lang,
+            "security_boundary": SECURITY_BOUNDARY_NOTICE,
+            "results": results,
+        }

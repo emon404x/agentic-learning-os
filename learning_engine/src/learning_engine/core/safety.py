@@ -106,19 +106,55 @@ def get_safety_disclaimer(domain_or_text: str | None) -> str:
 
 
 def validate_safe_url(url: str) -> str:
-    """Validate that a URL uses HTTP/HTTPS and does not target loopback, RFC 1918 private, or metadata IPs."""
+    """Validate that a URL uses HTTP/HTTPS and does not target loopback, RFC 1918 private, IPv6 local, or metadata IPs."""
+    import ipaddress
     from urllib.parse import urlparse
 
-    parsed = urlparse(url.strip())
+    cleaned = url.strip()
+    parsed = urlparse(cleaned)
     if parsed.scheme not in ("http", "https"):
         raise ValueError(f"Blocked unsafe URL scheme '{parsed.scheme}': only http/https are permitted.")
-    host = (parsed.hostname or "").lower()
+    if parsed.username or parsed.password:
+        raise ValueError("Blocked URL containing embedded credentials.")
+    host = (parsed.hostname or "").lower().strip("[]")
     if not host:
         raise ValueError("URL is missing a valid hostname.")
-    blocked_hosts = {"localhost", "127.0.0.1", "0.0.0.0", "::1", "169.254.169.254", "metadata.google.internal"}
-    if host in blocked_hosts or host.startswith(("10.", "192.168.", "169.254.")) or re.match(r"^172\.(1[6-9]|2\d|3[0-1])\.", host):
+
+    blocked_hosts = {
+        "localhost",
+        "localhost.localdomain",
+        "127.0.0.1",
+        "0.0.0.0",
+        "::1",
+        "169.254.169.254",
+        "metadata.google.internal",
+        "metadata",
+    }
+    if host in blocked_hosts or host.endswith((".local", ".internal", ".localhost", ".localdomain")):
         raise ValueError(f"Blocked SSRF/private network target host: '{host}'.")
-    return url.strip()
+
+    # Check literal IPv4 / IPv6 addresses (including 127.0.0.2, ::ffff:127.0.0.1, fe80::, fc00::, etc.)
+    try:
+        ip_obj = ipaddress.ip_address(host)
+        mapped = getattr(ip_obj, "ipv4_mapped", None)
+        for candidate_ip in (ip_obj, mapped) if mapped else (ip_obj,):
+            if (
+                candidate_ip.is_loopback
+                or candidate_ip.is_private
+                or candidate_ip.is_link_local
+                or candidate_ip.is_multicast
+                or candidate_ip.is_reserved
+                or candidate_ip.is_unspecified
+            ):
+                raise ValueError(f"Blocked SSRF/private IP address target: '{host}'.")
+    except ValueError as exc:
+        if "Blocked SSRF" in str(exc):
+            raise
+        # Host is a domain name, also reject numeric-only or suspiciously formatted internal prefixes
+        if host.startswith(("10.", "127.", "192.168.", "169.254.", "0.")) or re.match(r"^172\.(1[6-9]|2\d|3[0-1])\.", host):
+            raise ValueError(f"Blocked SSRF/private network target host: '{host}'.") from exc
+
+    return cleaned
 
 
 def resolve_safe_workspace_path(workspace_root: str | object, candidate_path: str | object) -> "Path":

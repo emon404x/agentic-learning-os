@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg)](pyproject.toml)
 [![Google Antigravity](https://img.shields.io/badge/Google%20Antigravity-Agent%20Skills%20%26%20MCP-4285F4.svg)](.agents/AGENTS.md)
-[![Tests: 74 Passing](https://img.shields.io/badge/Tests-74%20Passing-brightgreen.svg)](tests/)
+[![Tests: 81 Passing](https://img.shields.io/badge/Tests-81%20Passing-brightgreen.svg)](tests/)
 [![Maintainer: emon404x](https://img.shields.io/badge/Maintainer-%40emon404x-181717.svg)](https://github.com/emon404x)
 
 **Agentic Learning OS** (`agentic-learning-os`) is a next-generation, multi-agent AI Learning Operating System designed for **Google Antigravity Agent Skills** and standalone Python/CLI workflows. It combines autonomous multi-agent orchestration, verified multi-source research, adaptive state-aware tutoring, multi-language coding laboratories, guided software project mentorship, academic paper analysis, repository AST inspection, and SM-2 spaced repetition memory.
@@ -42,9 +42,9 @@ flowchart TD
     end
 
     Plan --> A1 & A2 & A3 & A4 & A5 & A6 & A7 & A8 & A9
-    A1 & A2 & A3 & A4 & A5 & A6 & A7 & A8 & A9 --> Tools["Modular Tool Registry (15+ Validated Tools) + Optional MCP Adapters"]
+    A1 & A2 & A3 & A4 & A5 & A6 & A7 & A8 & A9 --> Tools["Modular Tool Registry (21 Validated Tools) + Optional MCP Adapters"]
     Tools --> A10
-    A10 --> Store["Persistent Learner Memory (LocalLearningStore) & Offline Dashboard"]
+    A10 --> Store["Persistent Learner Memory (SQLite stardi_memory.db + JSON) & Offline Dashboard"]
 ```
 
 ---
@@ -56,7 +56,7 @@ flowchart TD
   1. `ResearchAgent` (`research-librarian`) — Multi-source discovery, qualitative evaluation, consensus vs. split comparison, strict citation verification.
   2. `CurriculumArchitectAgent` (`curriculum-architect` / `course-architect`) — 36-node prerequisite DAGs, 8 course modes (`quick`, `mastery`, `exam`, `project`, `research`, `materials`, `expert`, `troubleshooting`), and `.ics` Smart Study Planner.
   3. `PersonalTutorAgent` (`adaptive-tutor`) — 9 teaching styles, 8-step learning-state-aware adaptive re-explanation, Socratic questioning, and bilingual English/Bangla (`bn`) instruction.
-  4. `PracticalLabAgent` (`practical-learning-lab`) — Coding exercises in C, C++, Java, Python, JS, SQL, HTML, CSS with 3-level progressive hints (withholding solutions) and sandboxed test execution.
+  4. `PracticalLabAgent` (`practical-learning-lab`) — Coding exercises in C, C++, Java, Python, JS, SQL, HTML, CSS with 3-level progressive hints (withholding solutions) and process-isolated AST/static-checked test execution.
   5. `AssessmentAgent` (`assessment-coach`) — MCQs, short/long questions, worked math proofs, viva questions, timed mock exams, and 6-criterion formative rubric grading.
   6. `RevisionAgent` (`revision-coach`) — SuperMemo-2 (SM-2) flashcard scheduling, weak-concept tracking, and Anki CSV export.
   7. `ResearchPaperAgent` (`research-paper-analyst`) — 12-dimension academic paper analysis and multi-paper methodology comparison.
@@ -83,7 +83,7 @@ python scripts/alos.py agents
 python scripts/alos.py tools
 python scripts/alos.py mcp
 
-# 4. Run all 74 automated unit, acceptance, and agentic architecture tests
+# 4. Run all 81 automated unit, acceptance, and comprehensive audit tests
 python -m unittest discover -s tests -v
 ```
 
@@ -91,6 +91,7 @@ python -m unittest discover -s tests -v
 
 ## 4. Documentation Index
 
+- [Final Comprehensive Audit Report (`docs/FINAL_AUDIT_REPORT.md`)](docs/FINAL_AUDIT_REPORT.md)
 - [Agentic AI Architecture (`docs/AGENTIC_AI.md`)](docs/AGENTIC_AI.md)
 - [System Architecture (`docs/ARCHITECTURE.md`)](docs/ARCHITECTURE.md)
 - [Feature Reference (`docs/FEATURES.md`)](docs/FEATURES.md)

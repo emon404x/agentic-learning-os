@@ -51,8 +51,8 @@ def _print_json(data: Any) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        prog="stardi",
-        description="Stardi AI Learning Operating System CLI",
+        prog="alos",
+        description="Agentic Learning OS (v3.0.0) — Multi-Agent AI Learning Operating System CLI (`alos` / `stardi`)",
     )
     parser.add_argument("--workspace", default="./stardi_workspace", help="Path to local Stardi workspace directory")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -207,7 +207,17 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.cmd == "tutor":
-        res = generate_adaptive_reexplanation(args.concept, style=args.style, language=args.lang)
+        prof_dict = store.get_profile().to_dict()
+        state_dict = store.load_state()
+        prof_dict["concept_mastery"] = state_dict.get("concepts", {})
+        prof_dict["weak_concepts"] = list(prof_dict.get("weak_areas", []))
+        prof_dict["assessment_history"] = state_dict.get("assessments", [])
+        res = generate_adaptive_reexplanation(
+            args.concept,
+            style=args.style,
+            language=args.lang,
+            learner_profile=prof_dict,
+        )
         store.record_misconception(res["concept_id"], f"Requested adaptive re-explanation for: {args.concept}")
         _print_json(res)
         return 0

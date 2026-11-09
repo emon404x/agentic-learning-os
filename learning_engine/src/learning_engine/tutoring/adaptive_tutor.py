@@ -104,6 +104,102 @@ BUILT_IN_REEXPLANATIONS: dict[str, dict[str, Any]] = {
             "Explain the difference between `p`, `&x`, and `*p` in C using your own words."
         ),
     },
+    "recursion": {
+        "concept_id": "cs-recursion",
+        "difficult_part": (
+            "Beginners often think a recursive call `fact(n - 1)` overwrites the current `n` variable, instead of realizing "
+            "each call gets its own independent stack frame on the Call Stack that pauses and waits for the smaller call to return."
+        ),
+        "different_wording": (
+            "Recursion solves a big problem by solving one tiny step today and delegating the remaining `n - 1` steps to a fresh copy "
+            "of the same function, stopping as soon as it hits a trivial Base Case (`n <= 1`)."
+        ),
+        "real_life_analogy": (
+            "Imagine sitting in a dark movie theater and wanting to know which row number you are in. You ask the person in front of you "
+            "'What row are you in?' They ask the person in front of them, and so on until Row 1 (the Base Case) answers 'I am in Row 1!' "
+            "Each person adds 1 to the answer from in front of them (`1 + 1 = 2`, `2 + 1 = 3`) until the answer reaches you."
+        ),
+        "remedial_alternate_analogy": (
+            "Remedial Simpler Analogy (Russian Nesting Dolls): Opening doll #3 reveals doll #2; opening doll #2 reveals tiny solid doll #1 "
+            "(Base Case — cannot open further). Now you close doll #1 inside #2, and #2 inside #3 in reverse order."
+        ),
+        "simpler_example": [
+            "Code: `def countdown(n):`",
+            "  `if n == 0: return 'Liftoff!'`  # 1. Base Case (stops recursion)",
+            "  `return f'{n} -> ' + countdown(n - 1)`  # 2. Recursive Step (smaller input)",
+            "Trace `countdown(2)`: Frame `n=2` waits for `countdown(1)` -> Frame `n=1` waits for `countdown(0)` -> returns `'Liftoff!'` -> `'1 -> Liftoff!'` -> `'2 -> 1 -> Liftoff!'`.",
+        ],
+        "technical_buildup": (
+            "Every recursive invocation pushes a stack frame (activation record) holding local variables and return address onto the call stack. "
+            "Without a reachable base case or strictly decreasing measure, the call stack exhausts memory (`RecursionError` / stack overflow)."
+        ),
+        "similar_practice_problem": (
+            "Write a recursive function `sum_to(n)` that returns `1 + 2 + ... + n` with base case `sum_to(0) == 0`. Trace `sum_to(3)` frame by frame."
+        ),
+        "explain_back_question": (
+            "In your own words, what are the two mandatory parts of every working recursive function, and what happens if the base case is missing?"
+        ),
+    },
+    "loop": {
+        "concept_id": "py-loops",
+        "difficult_part": (
+            "Learners often confuse when to use a `for` loop (iterating over a known sequence/range) versus a `while` loop "
+            "(repeating while a condition remains true), or forget to update the loop variable inside a `while` loop."
+        ),
+        "different_wording": (
+            "A loop (লুপ / পুনরাবৃত্তি) lets your program execute a block of code repeatedly for each item in a collection (`for`) "
+            "or until a stopping condition is reached (`while`), without copy-pasting lines."
+        ),
+        "real_life_analogy": (
+            "A `for` loop is like a teacher calling attendance for every student on a fixed class roster from top to bottom. "
+            "A `while` loop is like stirring a cup of tea *while* sugar is still visible at the bottom — you check the condition before every stir."
+        ),
+        "simpler_example": [
+            "`for i in range(1, 4):`",
+            "    `print('Step', i)`  # Prints Step 1, Step 2, Step 3 and stops automatically",
+            "`count = 1`",
+            "`while count <= 3:`",
+            "    `print('Count', count); count += 1`  # Must increment count so condition eventually becomes False",
+        ],
+        "technical_buildup": (
+            "In Python, `for x in iterable:` calls `iter(iterable)` once and invokes `next()` on each iteration until `StopIteration` is raised. "
+            "A `while condition:` loop evaluates `bool(condition)` before each pass; `break` exits immediately and `continue` skips to the next check."
+        ),
+        "similar_practice_problem": (
+            "Write a Python `for` loop that prints all even numbers from 2 to 10 using `range(2, 11, 2)`."
+        ),
+        "explain_back_question": (
+            "Why does forgetting `count += 1` inside a `while count <= 3:` loop cause an infinite loop, whereas a `for i in range(3):` loop does not?"
+        ),
+    },
+    "object-oriented": {
+        "concept_id": "py-oop",
+        "difficult_part": (
+            "Learners frequently struggle with the difference between a `class` (the blueprint) and an `object`/`instance` (the actual item built from it), "
+            "and why `self` is passed as the first parameter of instance methods in Python."
+        ),
+        "different_wording": (
+            "Object-Oriented Programming (OOP) bundles related data (attributes) and the functions that act on that data (methods) "
+            "into a single reusable type called a Class. `self` simply refers to 'this specific object instance'."
+        ),
+        "real_life_analogy": (
+            "A `class BankAccount` is the blank architectural blueprint for bank accounts. When Alice opens an account (`alice = BankAccount('Alice', 100)`), "
+            "and Bob opens one (`bob = BankAccount('Bob', 50)`), `alice` and `bob` are separate objects. `self.balance` ensures depositing into `alice` never changes `bob`'s money."
+        ),
+        "simpler_example": [
+            "```python\nclass BankAccount:\n    def __init__(self, owner: str, balance: float = 0.0):\n        self.owner = owner\n        self.balance = balance\n\n    def deposit(self, amount: float) -> float:\n        self.balance += amount\n        return self.balance\n\nacc = BankAccount('Amina', 500.0)\nacc.deposit(250.0)  # Python calls BankAccount.deposit(acc, 250.0) -> acc.balance is now 750.0\n```",
+        ],
+        "technical_buildup": (
+            "OOP rests on four pillars: Encapsulation (bundling state + invariants), Abstraction (exposing clean methods while hiding internals), "
+            "Inheritance (specializing a base class `class SavingsAccount(BankAccount)`), and Polymorphism (uniform method interface across types)."
+        ),
+        "similar_practice_problem": (
+            "Add a `withdraw(self, amount: float)` method to `BankAccount` that raises `ValueError('Insufficient funds')` if `amount > self.balance`."
+        ),
+        "explain_back_question": (
+            "In your own words, what is the role of `__init__` and `self` when you write `acc = BankAccount('Amina', 500.0)`?"
+        ),
+    },
 }
 
 
@@ -116,7 +212,10 @@ def generate_adaptive_reexplanation(
 ) -> dict[str, Any]:
     """Generate a structured adaptive explanation (supporting both 6-step and 8-step state-aware protocols)."""
     q_lower = concept_or_query.lower()
-    matched_key = next((k for k in BUILT_IN_REEXPLANATIONS if k in q_lower), None)
+    if re.search(r"\boop\b", q_lower) or ("class" in q_lower and "object" in q_lower):
+        matched_key = "object-oriented"
+    else:
+        matched_key = next((k for k in BUILT_IN_REEXPLANATIONS if k in q_lower), None)
 
     if matched_key:
         data = dict(BUILT_IN_REEXPLANATIONS[matched_key])
@@ -158,9 +257,28 @@ def generate_adaptive_reexplanation(
     mastery_map = profile.get("concept_mastery", {})
     known_concepts = [cid for cid, m in mastery_map.items() if isinstance(m, dict) and m.get("state") == "mastered"]
     uncertain_concepts = [cid for cid, m in mastery_map.items() if isinstance(m, dict) and m.get("state") in ("exposed", "learning", "practiced")]
-    weak_concepts = list(dict.fromkeys(profile.get("weak_concepts", []) + [
-        cid for cid, m in mastery_map.items() if isinstance(m, dict) and m.get("state") == "needs_revision"
+    weak_concepts = list(dict.fromkeys(profile.get("weak_concepts", []) + profile.get("weak_areas", []) + [
+        cid for cid, m in mastery_map.items()
+        if isinstance(m, dict) and (m.get("state") == "needs_revision" or m.get("misconceptions"))
     ]))
+
+    # Detect repeat confusion: if the learner already struggled with this concept or explicitly asked "again"/"simpler"
+    cid = data["concept_id"]
+    prior_misconceptions = []
+    if isinstance(mastery_map.get(cid), dict):
+        prior_misconceptions = list(mastery_map[cid].get("misconceptions", []))
+    is_repeat_confusion = (
+        cid in weak_concepts
+        or bool(prior_misconceptions)
+        or any(w in q_lower for w in ("again", "simpler", "still don't understand", "still confused"))
+    )
+    if is_repeat_confusion:
+        alt_analogy = data.get(
+            "remedial_alternate_analogy",
+            f"Remedial Micro-Analogy for '{cid}': Picture a 2-box conveyor belt where Box 1 hands its output ticket directly to Box 2.",
+        )
+        data["real_life_analogy"] = f"{alt_analogy} (Adapted from standard analogy: {data['real_life_analogy']})"
+        data["different_wording"] = f"[Remedial Micro-Step Breakdown] {data['different_wording']}"
 
     evaluation = None
     next_decision = "awaiting_learner_response"
@@ -212,7 +330,10 @@ def generate_adaptive_reexplanation(
             "unlearned_prerequisites": profile.get("unlearned_prerequisites", []),
             "completed_lessons": profile.get("completed_lessons", []),
             "assessment_results_count": len(profile.get("assessment_history", [])),
+            "adapted_for_repeat_confusion": is_repeat_confusion,
+            "prior_misconceptions": prior_misconceptions,
         },
+        "adapted_for_repeat_confusion": is_repeat_confusion,
         "concept_id": data["concept_id"],
     }
     if language == "bn":

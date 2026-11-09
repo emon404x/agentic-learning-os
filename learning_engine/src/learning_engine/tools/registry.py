@@ -156,7 +156,10 @@ class ToolRegistry:
     def __init__(self, permission_guard: PermissionGuard | None = None) -> None:
         self._schemas: dict[str, ToolSchema] = {}
         self._handlers: dict[str, Callable[..., Any]] = {}
-        self.permission_guard = permission_guard
+        self.permission_guard = permission_guard or PermissionGuard(
+            workspace_root="./stardi_workspace",
+            max_autonomy_level=AutonomyLevel.LEVEL_2_REVERSIBLE,
+        )
 
     def register(self, schema: ToolSchema, handler: Callable[..., Any]) -> None:
         self._schemas[schema.name] = schema
@@ -263,49 +266,74 @@ def create_default_tool_registry(
     store: LocalLearningStore | None = None,
     permission_guard: PermissionGuard | None = None,
 ) -> ToolRegistry:
-    """Create a complete ToolRegistry populated with 15+ tools across all categories."""
-    reg = ToolRegistry(permission_guard=permission_guard)
+    """Create a complete ToolRegistry populated with 21 validated tools across all 7 categories and 5 autonomy levels."""
     active_store = store or LocalLearningStore("./stardi_workspace")
+    active_guard = permission_guard or PermissionGuard(
+        workspace_root=active_store.root,
+        max_autonomy_level=AutonomyLevel.LEVEL_2_REVERSIBLE,
+    )
+    reg = ToolRegistry(permission_guard=active_guard)
 
     # ------------------------------------------------------------------
     # 1. RESEARCH TOOLS
     # ------------------------------------------------------------------
     def _discover_and_evaluate_sources(topic: str, mode: str = "general_web", custom_sources: list[dict[str, Any]] | None = None) -> dict[str, Any]:
-        slug = re.sub(r"[^a-z0-9]+", "-", topic.lower()).strip("-") or "topic"
-        raw_sources = custom_sources or [
-            {
-                "title": f"{topic} — Official Technical Documentation & Specification",
-                "url": f"https://docs.python.org/3/search.html?q={slug}" if "python" in topic.lower() else f"https://ietf.org/rfcs/{slug}",
-                "author": "Standards & Core Maintainers",
-                "published_date": "2025-01-15",
-                "body": f"Core operational semantics, protocol invariants, and reference implementation details for {topic}.",
-            },
-            {
-                "title": f"{topic} — University Systems & Algorithms Lecture Notes",
-                "url": f"https://ocw.mit.edu/courses/{slug}",
-                "author": "Academic Systems Group",
-                "published_date": "2024-09-01",
-                "body": f"Formal complexity bounds, mathematical foundations, and architectural invariants for {topic}.",
-            },
-            {
-                "title": f"{topic} — Empirical Engineering Benchmarks & Trade-offs",
-                "url": f"https://arxiv.org/abs/2401.{abs(hash(topic)) % 89999 + 10000}",
-                "author": "Empirical Systems Lab",
-                "published_date": "2025-03-10",
-                "body": f"Abstract: Empirical benchmarks comparing latency vs throughput trade-offs in {topic}.",
-            },
-        ]
-        records = [
-            evaluate_source(
-                url=s["url"],
-                title=s.get("title", topic),
-                author_or_org=s.get("author", "Unknown"),
-                published_date=s.get("published_date", "undated"),
-                body=s.get("body", ""),
-                topic=topic,
+        from ..core.safety import validate_safe_url
+        from ..research.engine import discover_accessed_sources
+
+        disk_sources = discover_accessed_sources(active_store.root)
+        live_supplied = bool(custom_sources or disk_sources)
+
+        if custom_sources:
+            raw_sources = custom_sources
+        elif disk_sources:
+            raw_sources = [
+                {
+                    "title": r.title,
+                    "url": r.url,
+                    "author": r.author_or_org,
+                    "published_date": r.published_date,
+                    "body": f"Locally retrieved source ({r.word_count} words) at {r.local_path}.",
+                }
+                for r in disk_sources.values()
+            ]
+        else:
+            raw_sources = [
+                {
+                    "title": f"{topic} — Official Reference Documentation",
+                    "url": "https://docs.python.org/3/" if "python" in topic.lower() else "https://www.rfc-editor.org/",
+                    "author": "Standards & Core Maintainers",
+                    "published_date": "2025-01-15",
+                    "body": f"Core operational semantics, protocol invariants, and reference implementation details for {topic}.",
+                },
+                {
+                    "title": f"{topic} — OpenCourseWare Systems & Algorithms Reference",
+                    "url": "https://ocw.mit.edu/",
+                    "author": "MIT OpenCourseWare",
+                    "published_date": "2024-09-01",
+                    "body": f"Formal complexity bounds, mathematical foundations, and architectural invariants for {topic}.",
+                },
+                {
+                    "title": f"{topic} — Engineering Security & Architecture Guidelines",
+                    "url": "https://owasp.org/www-project-top-ten/",
+                    "author": "Open Standards Working Group",
+                    "published_date": "2024-11-10",
+                    "body": f"Empirical benchmarks and operational trade-offs comparing latency vs throughput in {topic}.",
+                },
+            ]
+        records = []
+        for s in raw_sources:
+            safe_u = validate_safe_url(s["url"])
+            records.append(
+                evaluate_source(
+                    url=safe_u,
+                    title=s.get("title", topic),
+                    author_or_org=s.get("author", "Unknown"),
+                    published_date=s.get("published_date", "undated"),
+                    body=s.get("body", ""),
+                    topic=topic,
+                )
             )
-            for s in raw_sources
-        ]
         urls = [r.url for r in records]
         theme = compare_evidence_across_sources(
             theme_id="TH01",
@@ -319,7 +347,13 @@ def create_default_tool_registry(
                 else []
             ),
         )
-        dossier = build_research_dossier(topic=topic, mode=mode, sources=records, themes=[theme])
+        dossier = build_research_dossier(
+            topic=topic,
+            mode=mode,
+            sources=records,
+            themes=[theme],
+            live_search_available=live_supplied,
+        )
         dossier["source_count"] = dossier["sources_count"]
         dossier["agreements"] = [t["claim"] for t in dossier["themes"]]
         dossier["insufficient_evidence"] = dossier["thin_evidence_themes"]
@@ -558,6 +592,10 @@ def create_default_tool_registry(
 
     def _adaptive_tutor_tool(concept: str, style: str = "simple", language: str = "en", learner_answer: str | None = None) -> dict[str, Any]:
         profile_dict = active_store.get_profile().to_dict()
+        state_dict = active_store.load_state()
+        profile_dict["concept_mastery"] = state_dict.get("concepts", {})
+        profile_dict["weak_concepts"] = list(profile_dict.get("weak_areas", []))
+        profile_dict["assessment_history"] = state_dict.get("assessments", [])
         return generate_adaptive_reexplanation(
             concept_or_query=concept,
             style=style,
@@ -593,6 +631,12 @@ def create_default_tool_registry(
                 item=q_target,
                 learner_answer=submitted_answer,
             )
+            active_store.record_assessment(eval_res)
+            if eval_res.get("percentage", 0.0) < 75.0:
+                active_store.record_misconception(
+                    eval_res.get("concept_id", "core-concept"),
+                    f"Scored {eval_res.get('percentage')}% on assessment for '{topic}'.",
+                )
         return {"exam_suite": suite, "submission_evaluation": eval_res}
 
     reg.register(
@@ -814,6 +858,56 @@ def create_default_tool_registry(
             ],
         ),
         _generate_visual_diagram_tool,
+    )
+
+    # ------------------------------------------------------------------
+    # 7. INTEGRATION & HIGH-CONSEQUENCE AUTONOMY TOOLS (LEVEL 3 & LEVEL 4)
+    # ------------------------------------------------------------------
+    def _invoke_mcp_connector_tool(server_id: str, mcp_tool_name: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
+        from ..mcp.adapters import create_default_mcp_registry
+
+        mcp_reg = create_default_mcp_registry(permission_guard=active_guard)
+        return mcp_reg.call_connector(
+            server_id=server_id,
+            tool_name=mcp_tool_name,
+            payload=payload or {},
+            actor="tool_registry",
+            guard=active_guard,
+        )
+
+    reg.register(
+        ToolSchema(
+            name="invoke_mcp_connector_tool",
+            category=ToolCategory.INTEGRATION,
+            description="Invoke an external or local MCP server connector (requires LEVEL 3 Approval for external network servers).",
+            autonomy_level=AutonomyLevel.LEVEL_3_APPROVAL_REQUIRED,
+            parameters=[
+                ToolParameter("server_id", "str", "Registered MCP server ID"),
+                ToolParameter("mcp_tool_name", "str", "Tool name on the MCP server"),
+                ToolParameter("payload", "dict", "Arguments dictionary", required=False, default=None),
+            ],
+        ),
+        _invoke_mcp_connector_tool,
+    )
+
+    def _reset_learner_memory_tool(confirm_phrase: str) -> dict[str, Any]:
+        if confirm_phrase != "CONFIRM_RESET":
+            raise ValueError("Confirmation phrase must equal 'CONFIRM_RESET'.")
+        backup_path = active_store.create_backup_zip(label="pre-reset")
+        active_store.delete_profile()
+        return {"status": "reset_completed", "backup_created": str(backup_path)}
+
+    reg.register(
+        ToolSchema(
+            name="reset_learner_memory_tool",
+            category=ToolCategory.KNOWLEDGE,
+            description="Irreversibly reset learner profile and history (creates a backup ZIP first; requires LEVEL 4 Explicit Confirmation).",
+            autonomy_level=AutonomyLevel.LEVEL_4_EXPLICIT_CONFIRMATION,
+            parameters=[
+                ToolParameter("confirm_phrase", "str", "Must be 'CONFIRM_RESET'"),
+            ],
+        ),
+        _reset_learner_memory_tool,
     )
 
     return reg

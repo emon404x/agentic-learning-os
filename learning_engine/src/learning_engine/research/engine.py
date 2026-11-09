@@ -65,10 +65,12 @@ def verify_citations(
     known_urls: set[str] | list[str],
     known_local_refs: set[str] | None = None,
     require_at_least_one: bool = True,
+    source_bodies: dict[str, str] | None = None,
+    claims_to_verify: list[str] | None = None,
 ) -> dict[str, Any]:
-    """Verify that every citation in `content` traces to an actually accessed source.
+    """Verify that every citation in `content` traces to an actually accessed source and optionally verify claim grounding.
 
-    Returns {"valid": bool, "cited_urls": [...], "unverified_urls": [...], "errors": [...]}.
+    Returns {"valid": bool, "cited_urls": [...], "unverified_urls": [...], "unsupported_claims": [...], "errors": [...]}.
     """
     cited = extract_cited_urls(content)
     local_refs = LOCAL_REF_PATTERN.findall(re.sub(r"<!--.*?-->", "", content, flags=re.S))
@@ -77,6 +79,7 @@ def verify_citations(
 
     unverified_urls = [u for u in cited if normalize_url(u) not in normalized_known]
     unverified_locals = [r for r in local_refs if r not in known_locals]
+    unsupported_claims: list[str] = []
 
     errors: list[str] = []
     if require_at_least_one and not cited and not local_refs:
@@ -86,12 +89,24 @@ def verify_citations(
     for r in unverified_locals:
         errors.append(f"Unverified local material reference: [ref:{r}]")
 
+    # Content-level grounding check when source bodies and claims are supplied
+    if source_bodies and claims_to_verify:
+        combined_corpus = " ".join(source_bodies.values()).lower()
+        for claim in claims_to_verify:
+            tokens = [t for t in re.split(r"\W+", claim.lower()) if len(t) > 3]
+            if tokens:
+                hits = sum(1 for t in tokens if t in combined_corpus)
+                if hits / len(tokens) < 0.35:
+                    unsupported_claims.append(claim)
+                    errors.append(f"Unsupported claim (key terms not grounded in retrieved source text): '{claim}'")
+
     return {
         "valid": len(errors) == 0,
         "cited_urls": cited,
         "local_refs": local_refs,
         "unverified_urls": unverified_urls,
         "unverified_local_refs": unverified_locals,
+        "unsupported_claims": unsupported_claims,
         "errors": errors,
     }
 

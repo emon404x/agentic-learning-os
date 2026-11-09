@@ -152,10 +152,25 @@ def render_lesson_audio_package(
             "privacy_notice": PRIVACY_DISCLOSURE,
         }
 
-    # Invoke the verified render_audio.py script
-    renderer = Path(__file__).resolve().parents[4] / ".agents" / "skills" / "claudemy" / "scripts" / "render_audio.py"
+    # Invoke the verified render_audio.py script (check repo root relative to package and current working directory)
+    candidates = [
+        Path(__file__).resolve().parents[4] / ".agents" / "skills" / "claudemy" / "scripts" / "render_audio.py",
+        Path(__file__).resolve().parents[4] / "skills" / "claudemy" / "scripts" / "render_audio.py",
+        Path.cwd() / ".agents" / "skills" / "claudemy" / "scripts" / "render_audio.py",
+    ]
+    renderer = next((c for c in candidates if c.exists()), candidates[0])
     if not renderer.exists():
-        renderer = Path(__file__).resolve().parents[4] / "skills" / "claudemy" / "scripts" / "render_audio.py"
+        return {
+            "status": "text_only_fallback",
+            "audio_generated": False,
+            "provider_used": "text_only",
+            "message": "render_audio.py script not found in active directory; synchronized transcript and chapters written.",
+            "script_path": str(script_path),
+            "transcript_path": str(transcript_path),
+            "chapters_path": str(chapters_path),
+            "mp3_path": None,
+            "privacy_notice": PRIVACY_DISCLOSURE,
+        }
 
     env = dict(os.environ)
     if provider_preference == "local_os":
