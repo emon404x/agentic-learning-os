@@ -71,7 +71,75 @@ flowchart TD
 
 ---
 
-## 3. Quick Start
+## 3. How to Use Agentic Learning OS in Your Work
+
+Whether you are an individual software engineer, an AI researcher, or a technical team lead, **Agentic Learning OS** adapts to your daily workflow across 7 core professional use cases:
+
+### 💼 Real-World Work Scenarios & CLI Commands
+
+#### 1. Accelerated Engineering Onboarding (Learn Any New Stack)
+> **Scenario**: You need to transition to a new framework, language, or architectural paradigm on demand without sifting through bloated tutorials.
+```powershell
+# Generate a structured mastery curriculum with 36-node prerequisite dependency DAGs
+python scripts/alos.py course "Distributed Systems Architecture" --mode mastery
+
+# Launch a 12-step guided project mentor that explains each file and concept step-by-step
+python scripts/alos.py project "Build a secure REST API with JWT authentication" --tech "FastAPI"
+```
+
+#### 2. Codebase & Repository Understanding (Deconstruct Complex Projects)
+> **Scenario**: You inherited an unfamiliar GitHub repository or legacy service and need to understand its modules, AST hierarchies, and execution flow before making PRs.
+```powershell
+# Ingest and analyze local or cloned repository AST structure
+python scripts/alos.py repo "./internal-microservice"
+
+# Ingest internal architecture documents, slides, or specifications (PDF, DOCX, PPTX, IPYNB, MD)
+python scripts/alos.py ingest "./docs/system-design.pdf"
+```
+
+#### 3. Research Paper & Tech Spec Analysis (Evaluate New Technologies)
+> **Scenario**: You need to evaluate an arXiv preprint, RFC, or deep tech whitepaper to determine if your engineering team should adopt it.
+```powershell
+# Perform a 12-dimension breakdown separating author claims from verified evidence
+python scripts/alos.py paper "https://arxiv.org/abs/2307.09288"
+```
+
+#### 4. Hands-on Coding Practice & Algorithm Laboratories
+> **Scenario**: Drill algorithms, language idioms, and systems programming without giving away the full solution upfront.
+```powershell
+# Practice coding with 3-tier progressive hints (Conceptual -> Structural -> Algorithm)
+python scripts/alos.py lab "Binary Search Tree" --language c --hint 1
+
+# Execute and verify your solution inside an AST-hardened, process-isolated environment
+python scripts/alos.py lab "Implement LRU Cache" --language python
+```
+
+#### 5. Certifications & Technical Exam Preparation
+> **Scenario**: Prepare for cloud certifications (AWS, GCP, CKA), operating systems, or university finals with realistic diagnostic assessments.
+```powershell
+# Generate diagnostic exams with MCQs, scenario questions, and 6-criterion rubric grading
+python scripts/alos.py exam "Computer Networking and Subnetting"
+```
+
+#### 6. Spaced Repetition & Long-Term Knowledge Retention
+> **Scenario**: Retain command flags, design patterns, and core concepts permanently using evidence-based cognitive science.
+```powershell
+# Review scheduled SuperMemo-2 (SM-2) flashcards from your local SQLite database
+python scripts/alos.py revision
+
+# Export your cards directly to an Anki-compatible CSV deck
+python scripts/alos.py revision --export-anki "anki_deck.csv"
+```
+
+#### 7. Natural Multi-Agent Orchestration
+> **Scenario**: Ask high-level, multi-stage goals in plain English or bilingual Bangla (`bn`). The orchestrator automatically coordinates the 10 specialized agents:
+```powershell
+python scripts/alos.py orchestrate "Research distributed consensus, create a prerequisite graph, and export a 30-day .ics study plan"
+```
+
+---
+
+## 4. Quick Start
 
 ```powershell
 # 1. Clone and install
@@ -93,7 +161,7 @@ python -m unittest discover -s tests -v
 
 ---
 
-## 4. Documentation Index
+## 5. Documentation Index
 
 - [Final Comprehensive Audit Report (`docs/FINAL_AUDIT_REPORT.md`)](docs/FINAL_AUDIT_REPORT.md)
 - [Agentic AI Architecture (`docs/AGENTIC_AI.md`)](docs/AGENTIC_AI.md)
@@ -108,7 +176,7 @@ python -m unittest discover -s tests -v
 
 ---
 
-## 5. Maintainer & License
+## 6. Maintainer & License
 
 - **Developer & Project Maintainer**: **Md. Aktaruzzaman Emon** ([@emon404x](https://github.com/emon404x))
 - **License**: MIT License — see [LICENSE](LICENSE), [ATTRIBUTION.md](ATTRIBUTION.md), and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for upstream attribution to Assaf Kipnis (`assafkip/claudemy`) for the preserved audio-course skill components.
