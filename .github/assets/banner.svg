@@ -1,349 +1,475 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 460" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 520" width="100%" height="100%">
   <defs>
-    <!-- Background Gradients -->
-    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#050711" />
-      <stop offset="50%" stop-color="#0a0f24" />
-      <stop offset="100%" stop-color="#060914" />
+    <!-- Deep Space Cyberpunk Background -->
+    <linearGradient id="bg-base" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#030611" />
+      <stop offset="45%" stop-color="#080d21" />
+      <stop offset="100%" stop-color="#040714" />
     </linearGradient>
 
-    <!-- Neon Glow Filters -->
-    <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="6" result="blur" />
-      <feMerge>
-        <feMergeNode in="blur" />
-        <feMergeNode in="SourceGraphic" />
-      </feMerge>
-    </filter>
+    <radialGradient id="nebula-cyan" cx="78%" cy="48%" r="42%">
+      <stop offset="0%" stop-color="#00f5ff" stop-opacity="0.20" />
+      <stop offset="55%" stop-color="#3b82f6" stop-opacity="0.07" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
 
-    <filter id="glow-purple" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="8" result="blur" />
-      <feMerge>
-        <feMergeNode in="blur" />
-        <feMergeNode in="SourceGraphic" />
-      </feMerge>
-    </filter>
+    <radialGradient id="nebula-purple" cx="25%" cy="30%" r="40%">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.15" />
+      <stop offset="60%" stop-color="#6366f1" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
 
-    <filter id="shadow-3d" x="-30%" y="-30%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#00f5ff" flood-opacity="0.22" />
-    </filter>
-
-    <filter id="card-shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#000000" flood-opacity="0.65" />
-    </filter>
-
-    <!-- Core Shimmer Gradients -->
-    <linearGradient id="title-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+    <!-- Animated Hero Title Gradient -->
+    <linearGradient id="hero-title-grad" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#38bdf8">
-        <animate attributeName="stop-color" values="#38bdf8; #818cf8; #c084fc; #38bdf8" dur="8s" repeatCount="indefinite" />
+        <animate attributeName="stop-color" values="#38bdf8;#a855f7;#2dd4bf;#38bdf8" dur="7s" repeatCount="indefinite" />
       </stop>
-      <stop offset="50%" stop-color="#a855f7">
-        <animate attributeName="stop-color" values="#a855f7; #ec4899; #06b6d4; #a855f7" dur="8s" repeatCount="indefinite" />
+      <stop offset="50%" stop-color="#c084fc">
+        <animate attributeName="stop-color" values="#c084fc;#38bdf8;#f472b6;#c084fc" dur="7s" repeatCount="indefinite" />
       </stop>
-      <stop offset="100%" stop-color="#06b6d4">
-        <animate attributeName="stop-color" values="#06b6d4; #3b82f6; #a855f7; #06b6d4" dur="8s" repeatCount="indefinite" />
+      <stop offset="100%" stop-color="#2dd4bf">
+        <animate attributeName="stop-color" values="#2dd4bf;#c084fc;#38bdf8;#2dd4bf" dur="7s" repeatCount="indefinite" />
       </stop>
     </linearGradient>
 
-    <linearGradient id="beam-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00f5ff" stop-opacity="0.8" />
-      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.1" />
+    <!-- Border & Card Gradients -->
+    <linearGradient id="frame-stroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.7" />
+      <stop offset="50%" stop-color="#818cf8" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#c084fc" stop-opacity="0.7" />
     </linearGradient>
 
-    <linearGradient id="beam-purple" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#c084fc" stop-opacity="0.8" />
-      <stop offset="100%" stop-color="#6366f1" stop-opacity="0.1" />
+    <linearGradient id="glass-surface" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.82" />
+      <stop offset="100%" stop-color="#090f20" stop-opacity="0.92" />
     </linearGradient>
 
-    <!-- 3D Cube Gradients -->
-    <linearGradient id="cube-top-1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="100%" stop-color="#0284c7" />
+    <!-- 3D Isometric Platform Gradients -->
+    <!-- Layer 3 (Top Orchestrator Platform - Cyan/Blue) -->
+    <linearGradient id="iso-top-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.92" />
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.92" />
     </linearGradient>
-    <linearGradient id="cube-left-1" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="iso-left-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#0369a1" />
-      <stop offset="100%" stop-color="#075985" />
+      <stop offset="100%" stop-color="#082f49" />
     </linearGradient>
-    <linearGradient id="cube-right-1" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="iso-right-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#0c4a6e" />
-      <stop offset="100%" stop-color="#032b44" />
+      <stop offset="100%" stop-color="#041929" />
     </linearGradient>
 
-    <linearGradient id="cube-top-2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#c084fc" />
-      <stop offset="100%" stop-color="#9333ea" />
+    <!-- Layer 2 (Middle 10 Agents Nexus - Purple/Indigo) -->
+    <linearGradient id="iso-top-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4c1d95" stop-opacity="0.88" />
+      <stop offset="100%" stop-color="#1e1b4b" stop-opacity="0.92" />
     </linearGradient>
-    <linearGradient id="cube-left-2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7e22ce" />
-      <stop offset="100%" stop-color="#581c87" />
+    <linearGradient id="iso-left-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#581c87" />
+      <stop offset="100%" stop-color="#2e1065" />
     </linearGradient>
-    <linearGradient id="cube-right-2" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="iso-right-purple" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#3b0764" />
-      <stop offset="100%" stop-color="#240046" />
+      <stop offset="100%" stop-color="#17032b" />
+    </linearGradient>
+
+    <!-- Layer 1 (Base SQLite & Security Plane - Slate/Emerald) -->
+    <linearGradient id="iso-top-base" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#064e3b" stop-opacity="0.85" />
+    </linearGradient>
+    <linearGradient id="iso-left-base" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#065f46" />
+      <stop offset="100%" stop-color="#022c22" />
+    </linearGradient>
+    <linearGradient id="iso-right-base" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#047857" />
+      <stop offset="100%" stop-color="#011c16" />
     </linearGradient>
 
     <linearGradient id="grid-fade" x1="0%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%" stop-color="#00f5ff" stop-opacity="0.35" />
-      <stop offset="70%" stop-color="#00f5ff" stop-opacity="0.05" />
-      <stop offset="100%" stop-color="#00f5ff" stop-opacity="0" />
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.32" />
+      <stop offset="65%" stop-color="#818cf8" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
     </linearGradient>
 
-    <!-- Glassmorphic Card Background -->
-    <linearGradient id="glass-card" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.75" />
-      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.88" />
+    <linearGradient id="laser-beam" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00f5ff" stop-opacity="0.85" />
+      <stop offset="50%" stop-color="#c084fc" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0.85" />
     </linearGradient>
 
-    <linearGradient id="card-border" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.6" />
-      <stop offset="50%" stop-color="#818cf8" stop-opacity="0.2" />
-      <stop offset="100%" stop-color="#c084fc" stop-opacity="0.5" />
-    </linearGradient>
+    <!-- Glow & 3D Shadow Filters -->
+    <filter id="glow-soft" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-intense" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="10" result="blur1" />
+      <feGaussianBlur stdDeviation="4" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="drop-3d" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#000000" flood-opacity="0.7" />
+    </filter>
+
+    <!-- Motion Paths for Streaming Data Packets -->
+    <path id="stream-path-1" d="M 970 140 L 855 235 L 970 375" />
+    <path id="stream-path-2" d="M 970 140 L 1085 235 L 970 375" />
+    <path id="stream-path-3" d="M 855 235 L 970 292 L 1085 235" />
   </defs>
 
-  <style>
-    @keyframes float-slow {
-      0% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-14px) rotate(1deg); }
-      100% { transform: translateY(0px) rotate(0deg); }
-    }
-    @keyframes float-fast {
-      0% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-20px) rotate(-2deg); }
-      100% { transform: translateY(0px) rotate(0deg); }
-    }
-    @keyframes float-reverse {
-      0% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(16px) rotate(1.5deg); }
-      100% { transform: translateY(0px) rotate(0deg); }
-    }
-    @keyframes pulse-ring {
-      0% { r: 6px; opacity: 0.9; }
-      50% { r: 12px; opacity: 0.3; }
-      100% { r: 6px; opacity: 0.9; }
-    }
-    @keyframes dash-flow {
-      0% { stroke-dashoffset: 200; }
-      100% { stroke-dashoffset: 0; }
-    }
-    @keyframes orbit-rotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    @keyframes glow-pulse {
-      0% { opacity: 0.45; }
-      50% { opacity: 0.85; }
-      100% { opacity: 0.45; }
-    }
+  <!-- 1. Canvas Background & Nebulae -->
+  <rect width="1280" height="520" rx="18" fill="url(#bg-base)" />
+  <rect width="1280" height="520" rx="18" fill="url(#nebula-purple)" />
+  <rect width="1280" height="520" rx="18" fill="url(#nebula-cyan)" />
 
-    .anim-float-1 { animation: float-slow 6s ease-in-out infinite; }
-    .anim-float-2 { animation: float-fast 5s ease-in-out infinite; }
-    .anim-float-3 { animation: float-reverse 7s ease-in-out infinite; }
-    .anim-pulse { animation: glow-pulse 4s ease-in-out infinite; }
-    .anim-dash { stroke-dasharray: 8 6; animation: dash-flow 12s linear infinite; }
-    .orbiting { transform-origin: 990px 220px; animation: orbit-rotate 24s linear infinite; }
-
-    .brand-title {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      font-weight: 900;
-      letter-spacing: -0.5px;
-    }
-    .brand-sub {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      font-weight: 500;
-      letter-spacing: 2px;
-    }
-    .badge-text {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-weight: 700;
-      font-size: 11px;
-      letter-spacing: 1px;
-    }
-    .card-label {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      font-weight: 700;
-      font-size: 12.5px;
-    }
-  </style>
-
-  <!-- Canvas Background -->
-  <rect width="1200" height="460" rx="16" fill="url(#bg-grad)" />
-
-  <!-- Outer Neon Frame -->
-  <rect width="1198" height="458" x="1" y="1" rx="16" fill="none" stroke="url(#card-border)" stroke-width="1.5" />
-
-  <!-- Ambient Light Orbs -->
-  <circle cx="220" cy="120" r="140" fill="#38bdf8" opacity="0.12" filter="url(#glow-cyan)" class="anim-pulse" />
-  <circle cx="1020" cy="240" r="180" fill="#a855f7" opacity="0.15" filter="url(#glow-purple)" class="anim-pulse" />
-  <circle cx="600" cy="400" r="160" fill="#06b6d4" opacity="0.08" filter="url(#glow-cyan)" />
-
-  <!-- 3D Isometric Perspective Floor Grid -->
-  <g opacity="0.45" stroke="url(#grid-fade)" stroke-width="1.2">
-    <!-- Perspective Converging Lines -->
-    <path d="M600 240 L-100 480" />
-    <path d="M600 240 L100 480" />
-    <path d="M600 240 L300 480" />
-    <path d="M600 240 L500 480" />
-    <path d="M600 240 L700 480" />
-    <path d="M600 240 L900 480" />
-    <path d="M600 240 L1100 480" />
-    <path d="M600 240 L1300 480" />
-
-    <!-- Isometric Horizon Latitudes -->
-    <path d="M260 300 L940 300" />
-    <path d="M180 340 L1020 340" />
-    <path d="M90 390 L1110 390" />
-    <path d="M-20 450 L1220 450" />
+  <!-- Subtle Background Tech Matrix Dots -->
+  <g fill="#38bdf8" opacity="0.18">
+    <circle cx="60" cy="40" r="1.5" /><circle cx="100" cy="40" r="1.5" /><circle cx="140" cy="40" r="1.5" />
+    <circle cx="60" cy="70" r="1.5" /><circle cx="100" cy="70" r="1.5" /><circle cx="140" cy="70" r="1.5" />
+    <circle cx="640" cy="50" r="1.5" /><circle cx="680" cy="50" r="1.5" /><circle cx="720" cy="50" r="1.5" />
+    <circle cx="1180" cy="470" r="1.5" /><circle cx="1210" cy="470" r="1.5" /><circle cx="1240" cy="470" r="1.5" />
   </g>
 
-  <!-- Glowing Neural Circuit Traces -->
-  <g fill="none" stroke-width="1.5" opacity="0.6">
-    <path d="M120 80 L280 80 L340 140 L460 140" stroke="#38bdf8" class="anim-dash" />
-    <path d="M850 110 L940 110 L990 160 L1100 160" stroke="#c084fc" class="anim-dash" />
-    <path d="M780 380 L880 380 L940 320 L1060 320" stroke="#00f5ff" class="anim-dash" />
-    <path d="M80 360 L180 360 L240 300 L320 300" stroke="#818cf8" class="anim-dash" />
+  <!-- 2. 3D Perspective Cyber Floor Grid -->
+  <g stroke="url(#grid-fade)" stroke-width="1.1" fill="none">
+    <path d="M 640 270 L -120 520" />
+    <path d="M 640 270 L 80 520" />
+    <path d="M 640 270 L 280 520" />
+    <path d="M 640 270 L 460 520" />
+    <path d="M 640 270 L 640 520" />
+    <path d="M 640 270 L 820 520" />
+    <path d="M 640 270 L 1000 520" />
+    <path d="M 640 270 L 1200 520" />
+    <path d="M 640 270 L 1400 520" />
+    <path d="M 180 340 L 1100 340" />
+    <path d="M 80 390 L 1200 390" />
+    <path d="M -20 445 L 1300 445" />
+    <path d="M -100 505 L 1380 505" />
   </g>
 
-  <!-- Circuit Junction Nodes -->
-  <circle cx="280" cy="80" r="3.5" fill="#00f5ff" />
-  <circle cx="340" cy="140" r="3.5" fill="#38bdf8" />
-  <circle cx="940" cy="110" r="3.5" fill="#c084fc" />
-  <circle cx="990" cy="160" r="3.5" fill="#e879f9" />
-  <circle cx="940" cy="320" r="3.5" fill="#00f5ff" />
+  <!-- Outer Glowing Cyber Border -->
+  <rect x="1.5" y="1.5" width="1277" height="517" rx="16.5" fill="none" stroke="url(#frame-stroke)" stroke-width="2" />
+  <!-- Corner HUD Accents -->
+  <path d="M 2 34 L 2 18 Q 2 2 18 2 L 42 2" fill="none" stroke="#00f5ff" stroke-width="3" />
+  <path d="M 1238 2 L 1262 2 Q 1278 2 1278 18 L 1278 34" fill="none" stroke="#c084fc" stroke-width="3" />
+  <path d="M 2 486 L 2 502 Q 2 518 18 518 L 42 518" fill="none" stroke="#38bdf8" stroke-width="3" />
+  <path d="M 1238 518 L 1262 518 Q 1278 518 1278 502 L 1278 486" fill="none" stroke="#10b981" stroke-width="3" />
 
-  <!-- LEFT HERO SECTION -->
-  <g transform="translate(80, 0)">
-    <!-- Version & Framework Pill -->
-    <g transform="translate(0, 72)">
-      <rect width="320" height="30" rx="15" fill="#0f172a" stroke="url(#card-border)" stroke-width="1.2" />
-      <circle cx="16" cy="15" r="4.5" fill="#10b981">
-        <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" />
+  <!-- ======================================================================= -->
+  <!-- 3. LEFT COMMAND DECK: HERO BRANDING, PIPELINE, 3D METRIC CARDS & CLI    -->
+  <!-- ======================================================================= -->
+  <g transform="translate(56, 36)">
+
+    <!-- Top Telemetry Pill -->
+    <g transform="translate(0, 0)" filter="url(#drop-3d)">
+      <rect width="465" height="32" rx="16" fill="#091024" stroke="url(#frame-stroke)" stroke-width="1.2" />
+      <!-- Window Control Dots -->
+      <circle cx="18" cy="16" r="4.5" fill="#ff5f56" />
+      <circle cx="32" cy="16" r="4.5" fill="#ffbd2e" />
+      <circle cx="46" cy="16" r="4.5" fill="#27c93f" />
+      <line x1="62" y1="6" x2="62" y2="26" stroke="#1e293b" stroke-width="1.5" />
+      <!-- Live Pulse Dot -->
+      <circle cx="78" cy="16" r="4" fill="#10b981">
+        <animate attributeName="opacity" values="1;0.25;1" dur="1.8s" repeatCount="indefinite" />
       </circle>
-      <text x="32" y="19" fill="#94a3b8" class="badge-text">AGENTIC LEARNING OS <tspan fill="#38bdf8">v3.0.0</tspan> • PRODUCTION</text>
-    </g>
-
-    <!-- Main Title -->
-    <text x="0" y="160" font-size="52" fill="url(#title-gradient)" class="brand-title" filter="url(#glow-cyan)">AGENTIC LEARNING OS</text>
-
-    <!-- Subtitle / Tagline -->
-    <g transform="translate(2, 196)">
-      <text x="0" y="0" font-size="14.5" fill="#e2e8f0" class="brand-sub">
-        LEARN ANYTHING <tspan fill="#38bdf8">•</tspan> BUILD EVERYTHING <tspan fill="#a855f7">•</tspan> MASTER MORE
+      <text x="90" y="20" fill="#cbd5e1" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="700" letter-spacing="0.8">
+        SYSTEM ONLINE <tspan fill="#38bdf8">•</tspan> <tspan fill="#a855f7">v3.0.0</tspan> <tspan fill="#38bdf8">•</tspan> ANTIGRAVITY &amp; CLI
       </text>
     </g>
 
-    <!-- Feature Description -->
-    <text x="2" y="234" font-size="14.5" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" line-height="1.5">
-      Autonomous multi-agent learning engine for Google Antigravity &amp; CLI.
+    <!-- 3D Extruded Hero Title -->
+    <g transform="translate(0, 88)">
+      <!-- 3D Depth Extrusion Layers -->
+      <text x="4" y="5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="50" font-weight="900" letter-spacing="-0.5" fill="#020617" opacity="0.9">
+        AGENTIC LEARNING OS
+      </text>
+      <text x="2" y="2.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="50" font-weight="900" letter-spacing="-0.5" fill="#0ea5e9" opacity="0.35">
+        AGENTIC LEARNING OS
+      </text>
+      <!-- Main Animated Neon Gradient Title -->
+      <text x="0" y="0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="50" font-weight="900" letter-spacing="-0.5" fill="url(#hero-title-grad)" filter="url(#glow-soft)">
+        AGENTIC LEARNING OS
+      </text>
+    </g>
+
+    <!-- Tagline -->
+    <text x="2" y="120" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14.5" font-weight="800" letter-spacing="2.8" fill="#f8fafc">
+      LEARN ANYTHING <tspan fill="#00f5ff">•</tspan> BUILD EVERYTHING <tspan fill="#c084fc">•</tspan> MASTER MORE
     </text>
-    <text x="2" y="256" font-size="14.5" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
-      10 Specialized AI Agents <tspan fill="#38bdf8">•</tspan> 21 Validated Tools <tspan fill="#a855f7">•</tspan> Relational SQLite Memory
+
+    <!-- Subtitle Description -->
+    <text x="2" y="150" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" fill="#94a3b8">
+      Next-Generation Autonomous Multi-Agent AI Learning Operating System with Verified Research,
+    </text>
+    <text x="2" y="170" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" fill="#94a3b8">
+      36-Node Prerequisite DAGs, AST-Hardened Coding Labs, and Relational SQLite Spaced Repetition.
     </text>
 
-    <!-- Feature Stat Badges -->
-    <g transform="translate(0, 290)">
-      <!-- Badge 1: 10 Agents -->
-      <g transform="translate(0, 0)">
-        <rect width="130" height="54" rx="10" fill="url(#glass-card)" stroke="url(#card-border)" stroke-width="1.2" filter="url(#card-shadow)" />
-        <text x="14" y="24" fill="#38bdf8" font-size="18" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="900">10 Agents</text>
-        <text x="14" y="42" fill="#94a3b8" font-size="11" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Autonomous DAG</text>
+    <!-- Animated 9-Stage Pedagogical Mastery Pipeline Bar -->
+    <g transform="translate(0, 190)">
+      <rect width="600" height="34" rx="8" fill="#070d1f" stroke="#1e293b" stroke-width="1.2" />
+      <!-- Animated Scanner Highlight -->
+      <rect x="4" y="4" width="110" height="26" rx="6" fill="#38bdf8" opacity="0.16">
+        <animate attributeName="x" values="4;486;4" dur="9s" repeatCount="indefinite" />
+      </rect>
+      <text x="300" y="21" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.8" font-weight="700" fill="#e2e8f0" letter-spacing="0.4">
+        <tspan fill="#38bdf8">RESEARCH</tspan> → UNDERSTAND → <tspan fill="#a855f7">PLAN</tspan> → LEARN → <tspan fill="#10b981">PRACTICE</tspan> → BUILD → <tspan fill="#f59e0b">TEST</tspan> → REVIEW → <tspan fill="#00f5ff">MASTER</tspan>
+      </text>
+    </g>
+
+    <!-- 4 3D Beveled Metric Cards -->
+    <g transform="translate(0, 242)">
+      <!-- Card 1: 10 Agents -->
+      <g transform="translate(0, 0)" filter="url(#drop-3d)">
+        <!-- 3D Bottom Bevel -->
+        <rect x="3" y="5" width="140" height="68" rx="10" fill="#0284c7" opacity="0.45" />
+        <rect width="140" height="68" rx="10" fill="url(#glass-surface)" stroke="#38bdf8" stroke-width="1.3" />
+        <circle cx="122" cy="18" r="4" fill="#38bdf8">
+          <animate attributeName="opacity" values="0.3;1;0.3" dur="2.2s" repeatCount="indefinite" />
+        </circle>
+        <text x="14" y="30" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="21" font-weight="900">10 Agents</text>
+        <text x="14" y="48" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="600">Parallel DAG Waves</text>
+        <text x="14" y="61" fill="#64748b" font-family="ui-monospace, monospace" font-size="9.5">ThreadPoolExecutor</text>
       </g>
 
-      <!-- Badge 2: 21 Tools -->
-      <g transform="translate(142, 0)">
-        <rect width="130" height="54" rx="10" fill="url(#glass-card)" stroke="url(#card-border)" stroke-width="1.2" filter="url(#card-shadow)" />
-        <text x="14" y="24" fill="#a855f7" font-size="18" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="900">21 Tools</text>
-        <text x="14" y="42" fill="#94a3b8" font-size="11" font-family="-apple-system, BlinkMacSystemFont, sans-serif">5 Autonomy Tiers</text>
+      <!-- Card 2: 21 Tools -->
+      <g transform="translate(153, 0)" filter="url(#drop-3d)">
+        <rect x="3" y="5" width="140" height="68" rx="10" fill="#9333ea" opacity="0.45" />
+        <rect width="140" height="68" rx="10" fill="url(#glass-surface)" stroke="#c084fc" stroke-width="1.3" />
+        <circle cx="122" cy="18" r="4" fill="#c084fc">
+          <animate attributeName="opacity" values="1;0.3;1" dur="2.2s" repeatCount="indefinite" />
+        </circle>
+        <text x="14" y="30" fill="#c084fc" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="21" font-weight="900">21 Tools</text>
+        <text x="14" y="48" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="600">5 Autonomy Tiers</text>
+        <text x="14" y="61" fill="#64748b" font-family="ui-monospace, monospace" font-size="9.5">Levels 0–4 Guarded</text>
       </g>
 
-      <!-- Badge 3: 15 Skills -->
-      <g transform="translate(284, 0)">
-        <rect width="130" height="54" rx="10" fill="url(#glass-card)" stroke="url(#card-border)" stroke-width="1.2" filter="url(#card-shadow)" />
-        <text x="14" y="24" fill="#10b981" font-size="18" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="900">15 Skills</text>
-        <text x="14" y="42" fill="#94a3b8" font-size="11" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Antigravity Native</text>
+      <!-- Card 3: 15 Skills -->
+      <g transform="translate(306, 0)" filter="url(#drop-3d)">
+        <rect x="3" y="5" width="140" height="68" rx="10" fill="#059669" opacity="0.45" />
+        <rect width="140" height="68" rx="10" fill="url(#glass-surface)" stroke="#10b981" stroke-width="1.3" />
+        <circle cx="122" cy="18" r="4" fill="#10b981">
+          <animate attributeName="opacity" values="0.4;1;0.4" dur="2.6s" repeatCount="indefinite" />
+        </circle>
+        <text x="14" y="30" fill="#10b981" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="21" font-weight="900">15 Skills</text>
+        <text x="14" y="48" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="600">Antigravity Native</text>
+        <text x="14" y="61" fill="#64748b" font-family="ui-monospace, monospace" font-size="9.5">.agents/skills/*</text>
       </g>
 
-      <!-- Badge 4: 81 Tests -->
-      <g transform="translate(426, 0)">
-        <rect width="130" height="54" rx="10" fill="url(#glass-card)" stroke="url(#card-border)" stroke-width="1.2" filter="url(#card-shadow)" />
-        <text x="14" y="24" fill="#f59e0b" font-size="18" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="900">81 Tests</text>
-        <text x="14" y="42" fill="#94a3b8" font-size="11" font-family="-apple-system, BlinkMacSystemFont, sans-serif">100% Verified Pass</text>
+      <!-- Card 4: 81 Tests -->
+      <g transform="translate(459, 0)" filter="url(#drop-3d)">
+        <rect x="3" y="5" width="141" height="68" rx="10" fill="#d97706" opacity="0.45" />
+        <rect width="141" height="68" rx="10" fill="url(#glass-surface)" stroke="#f59e0b" stroke-width="1.3" />
+        <circle cx="123" cy="18" r="4" fill="#f59e0b">
+          <animate attributeName="opacity" values="1;0.35;1" dur="2.0s" repeatCount="indefinite" />
+        </circle>
+        <text x="14" y="30" fill="#f59e0b" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="21" font-weight="900">81 Tests</text>
+        <text x="14" y="48" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="600">100% Audit Pass</text>
+        <text x="14" y="61" fill="#64748b" font-family="ui-monospace, monospace" font-size="9.5">SQLite + AST Safe</text>
       </g>
     </g>
 
-    <!-- Maintainer Attribution Tag -->
-    <g transform="translate(0, 386)">
-      <text x="2" y="16" fill="#64748b" font-size="12" font-family="-apple-system, BlinkMacSystemFont, sans-serif">
-        DEVELOPED &amp; MAINTAINED BY <tspan fill="#e2e8f0" font-weight="700">MD. AKTARUZZAMAN EMON</tspan> (<tspan fill="#38bdf8">@emon404x</tspan>)
+    <!-- Interactive CLI Prompt Box -->
+    <g transform="translate(0, 332)" filter="url(#drop-3d)">
+      <rect width="600" height="44" rx="10" fill="#050814" stroke="#334155" stroke-width="1.2" />
+      <rect x="10" y="10" width="28" height="24" rx="5" fill="#0f172a" stroke="#38bdf8" stroke-width="1" />
+      <text x="24" y="26" text-anchor="middle" fill="#38bdf8" font-family="ui-monospace, monospace" font-size="13" font-weight="800">&gt;_</text>
+      <text x="48" y="27" fill="#e2e8f0" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" font-weight="600">
+        <tspan fill="#10b981">python</tspan> scripts/alos.py <tspan fill="#38bdf8">orchestrate</tspan> <tspan fill="#fcd34d">"Master Distributed Systems"</tspan>
+      </text>
+      <!-- Blinking Cursor -->
+      <rect x="556" y="14" width="7" height="16" fill="#00f5ff">
+        <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite" />
+      </rect>
+    </g>
+
+    <!-- Maintainer Signature Bar -->
+    <g transform="translate(2, 404)">
+      <text x="0" y="15" fill="#64748b" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" letter-spacing="0.6">
+        ARCHITECTED &amp; MAINTAINED BY <tspan fill="#f8fafc" font-weight="800">MD. AKTARUZZAMAN EMON</tspan> (<tspan fill="#38bdf8" font-weight="700">@emon404x</tspan>) <tspan fill="#475569">•</tspan> <tspan fill="#a855f7">MIT LICENSE</tspan>
       </text>
     </g>
   </g>
 
-  <!-- RIGHT 3D ISOMETRIC DISPLAY -->
-  <g transform="translate(710, 30)">
-    <!-- Orbiting Ring in 3D tilt -->
-    <g class="orbiting" opacity="0.35">
-      <ellipse cx="280" cy="190" rx="170" ry="85" fill="none" stroke="url(#beam-cyan)" stroke-width="1.8" stroke-dasharray="12 8" transform="rotate(-20 280 190)" />
-      <circle cx="120" cy="160" r="5" fill="#00f5ff" filter="url(#glow-cyan)" />
-      <circle cx="440" cy="220" r="6" fill="#a855f7" filter="url(#glow-purple)" />
-    </g>
+  <!-- ======================================================================= -->
+  <!-- 4. RIGHT 3D ISOMETRIC MULTI-AGENT HOLOGRAPHIC STACK (x=700..1240)       -->
+  <!-- ======================================================================= -->
 
-    <!-- Floating 3D Isometric Card 1: Central Orchestrator -->
-    <g class="anim-float-1" transform="translate(140, 60)" filter="url(#shadow-3d)">
-      <polygon points="120,10 240,70 120,130 0,70" fill="url(#cube-top-1)" opacity="0.9" />
-      <polygon points="0,70 120,130 120,170 0,110" fill="url(#cube-left-1)" />
-      <polygon points="120,130 240,70 240,110 120,170" fill="url(#cube-right-1)" />
-      <!-- Central Core Light -->
-      <circle cx="120" cy="70" r="16" fill="#ffffff" opacity="0.9" filter="url(#glow-cyan)">
-        <animate attributeName="r" values="14;18;14" dur="3s" repeatCount="indefinite" />
-      </circle>
-      <!-- Label Banner -->
-      <g transform="translate(42, 60)">
-        <rect width="156" height="26" rx="6" fill="#050b1a" opacity="0.92" stroke="#38bdf8" stroke-width="1" />
-        <text x="78" y="17" fill="#e0f2fe" text-anchor="middle" class="card-label">10-Stage Orchestrator</text>
-      </g>
-    </g>
-
-    <!-- Floating 3D Isometric Card 2: Knowledge DAG & Tutor -->
-    <g class="anim-float-2" transform="translate(20, 190)" filter="url(#card-shadow)">
-      <polygon points="90,10 180,55 90,100 0,55" fill="url(#cube-top-2)" opacity="0.85" />
-      <polygon points="0,55 90,100 90,130 0,85" fill="url(#cube-left-2)" />
-      <polygon points="90,100 180,55 180,85 90,130" fill="url(#cube-right-2)" />
-      <circle cx="90" cy="55" r="12" fill="#f0abfc" opacity="0.9" filter="url(#glow-purple)" />
-      <g transform="translate(18, 45)">
-        <rect width="144" height="24" rx="6" fill="#160826" opacity="0.92" stroke="#c084fc" stroke-width="1" />
-        <text x="72" y="16" fill="#fae8ff" text-anchor="middle" class="card-label">Prerequisite DAG</text>
-      </g>
-    </g>
-
-    <!-- Floating 3D Isometric Card 3: Practical Lab & Security -->
-    <g class="anim-float-3" transform="translate(240, 230)" filter="url(#card-shadow)">
-      <polygon points="100,10 200,60 100,110 0,60" fill="#059669" opacity="0.85" />
-      <polygon points="0,60 100,110 100,140 0,90" fill="#047857" />
-      <polygon points="100,110 200,60 200,90 100,140" fill="#065f46" />
-      <circle cx="100" cy="60" r="12" fill="#34d399" opacity="0.9" filter="url(#glow-cyan)" />
-      <g transform="translate(24, 50)">
-        <rect width="152" height="24" rx="6" fill="#022116" opacity="0.92" stroke="#10b981" stroke-width="1" />
-        <text x="76" y="16" fill="#ecfdf5" text-anchor="middle" class="card-label">AST-Isolated Labs</text>
-      </g>
-    </g>
-
-    <!-- Floating Mini Isometric Crystal/Cube in Background -->
-    <g class="anim-float-2" transform="translate(320, 90)">
-      <polygon points="30,0 60,15 30,30 0,15" fill="#f59e0b" opacity="0.9" />
-      <polygon points="0,15 30,30 30,45 0,30" fill="#d97706" />
-      <polygon points="30,30 60,15 60,30 30,45" fill="#b45309" />
-    </g>
-
-    <g class="anim-float-1" transform="translate(50, 110)">
-      <polygon points="25,0 50,12 25,24 0,12" fill="#38bdf8" opacity="0.8" />
-      <polygon points="0,12 25,24 25,34 0,22" fill="#0284c7" />
-      <polygon points="25,24 50,12 50,22 25,34" fill="#0369a1" />
-    </g>
-
-    <!-- 3D Interconnecting Light Beams -->
-    <path d="M260 130 L110 245" stroke="url(#beam-cyan)" stroke-width="2" class="anim-dash" />
-    <path d="M260 130 L340 290" stroke="url(#beam-purple)" stroke-width="2" class="anim-dash" />
-    <path d="M110 245 L340 290" stroke="#10b981" stroke-width="1.5" opacity="0.4" stroke-dasharray="4 4" />
+  <!-- Vertical Laser Pillars Connecting the 3 Isometric Planes -->
+  <g stroke="url(#laser-beam)" stroke-width="1.8" stroke-dasharray="5 5" opacity="0.65">
+    <line x1="970" y1="140" x2="970" y2="390">
+      <animate attributeName="stroke-dashoffset" values="40;0" dur="2s" repeatCount="indefinite" />
+    </line>
+    <line x1="855" y1="235" x2="855" y2="385">
+      <animate attributeName="stroke-dashoffset" values="40;0" dur="2.5s" repeatCount="indefinite" />
+    </line>
+    <line x1="1085" y1="235" x2="1085" y2="385">
+      <animate attributeName="stroke-dashoffset" values="40;0" dur="2.5s" repeatCount="indefinite" />
+    </line>
   </g>
+
+  <!-- ======================================================================= -->
+  <!-- LAYER 1 (BOTTOM): 3D ISOMETRIC MEMORY, SECURITY & STORAGE FOUNDATION    -->
+  <!-- Center: (970, 385)                                                      -->
+  <!-- ======================================================================= -->
+  <g filter="url(#drop-3d)">
+    <g>
+      <animateTransform attributeName="transform" type="translate" values="0,0; 0,-5; 0,0" dur="6s" repeatCount="indefinite" />
+      <!-- Isometric Top Diamond -->
+      <polygon points="970,310 1170,395 970,480 770,395" fill="url(#iso-top-base)" stroke="#10b981" stroke-width="1.5" />
+      <!-- Isometric Left Wall -->
+      <polygon points="770,395 970,480 970,504 770,419" fill="url(#iso-left-base)" stroke="#059669" stroke-width="1" />
+      <!-- Isometric Right Wall -->
+      <polygon points="970,480 1170,395 1170,419 970,504" fill="url(#iso-right-base)" stroke="#047857" stroke-width="1" />
+
+      <!-- Inner Isometric Grid Lines on Base Layer -->
+      <line x1="870" y1="352" x2="1070" y2="437" stroke="#10b981" stroke-width="0.8" opacity="0.35" />
+      <line x1="1070" y1="352" x2="870" y2="437" stroke="#10b981" stroke-width="0.8" opacity="0.35" />
+
+      <!-- Glowing Server Status LEDs on Left Wall -->
+      <circle cx="805" cy="422" r="3" fill="#10b981" />
+      <circle cx="820" cy="428" r="3" fill="#38bdf8" />
+      <circle cx="835" cy="435" r="3" fill="#10b981">
+        <animate attributeName="opacity" values="1;0.2;1" dur="1.4s" repeatCount="indefinite" />
+      </circle>
+
+      <!-- Base Layer Label Pill -->
+      <rect x="850" y="382" width="240" height="28" rx="6" fill="#021713" opacity="0.92" stroke="#10b981" stroke-width="1.2" />
+      <text x="970" y="400" text-anchor="middle" fill="#a7f3d0" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11.5" font-weight="700">
+        SQLITE MEMORY • AST SANDBOX
+      </text>
+    </g>
+  </g>
+
+  <!-- ======================================================================= -->
+  <!-- LAYER 2 (MIDDLE): 10 SPECIALIZED AGENTS & 21 TOOLS NEXUS                -->
+  <!-- Center: (970, 250)                                                      -->
+  <!-- ======================================================================= -->
+  <g filter="url(#drop-3d)">
+    <g>
+      <animateTransform attributeName="transform" type="translate" values="0,0; 0,-10; 0,0" dur="5s" repeatCount="indefinite" />
+      <!-- Isometric Top Diamond -->
+      <polygon points="970,175 1150,252 970,330 790,252" fill="url(#iso-top-purple)" stroke="#c084fc" stroke-width="1.6" />
+      <!-- Isometric Left Wall -->
+      <polygon points="790,252 970,330 970,350 790,272" fill="url(#iso-left-purple)" stroke="#9333ea" stroke-width="1" />
+      <!-- Isometric Right Wall -->
+      <polygon points="970,330 1150,252 1150,272 970,350" fill="url(#iso-right-purple)" stroke="#7e22ce" stroke-width="1" />
+
+      <!-- Isometric Circuit Web Connecting Agent Nodes -->
+      <polygon points="970,196 1095,252 970,308 845,252" fill="none" stroke="#e879f9" stroke-width="1" stroke-dasharray="4 4" opacity="0.6" />
+
+      <!-- 4 Corner Specialist Agent Nodes on Middle Plane -->
+      <!-- Node N: Research Agent -->
+      <circle cx="970" cy="196" r="6" fill="#38bdf8" filter="url(#glow-soft)" />
+      <!-- Node W: Tutor & Lab Agent -->
+      <circle cx="845" cy="252" r="7" fill="#c084fc" filter="url(#glow-soft)" />
+      <!-- Node E: Project & Repo Agent -->
+      <circle cx="1095" cy="252" r="7" fill="#38bdf8" filter="url(#glow-soft)" />
+      <!-- Node S: Quality & Safety Gate -->
+      <circle cx="970" cy="308" r="6" fill="#10b981" filter="url(#glow-soft)" />
+
+      <!-- Middle Layer Label Pill -->
+      <rect x="860" y="238" width="220" height="28" rx="6" fill="#14062b" opacity="0.94" stroke="#c084fc" stroke-width="1.2" />
+      <text x="970" y="256" text-anchor="middle" fill="#f5d0fe" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11.5" font-weight="700">
+        10 AGENTS • 21 TOOLS • MCP
+      </text>
+    </g>
+  </g>
+
+  <!-- ======================================================================= -->
+  <!-- LAYER 3 (TOP CROWN): 10-STAGE CENTRAL ORCHESTRATOR & 3D HYPERCUBE       -->
+  <!-- Center: (970, 118)                                                      -->
+  <!-- ======================================================================= -->
+  <g filter="url(#drop-3d)">
+    <g>
+      <animateTransform attributeName="transform" type="translate" values="0,0; 0,-14; 0,0" dur="4.2s" repeatCount="indefinite" />
+
+      <!-- Isometric Crown Platform -->
+      <polygon points="970,62 1105,120 970,178 835,120" fill="url(#iso-top-cyan)" stroke="#7dd3fc" stroke-width="1.8" />
+      <polygon points="835,120 970,178 970,196 835,138" fill="url(#iso-left-cyan)" stroke="#38bdf8" stroke-width="1" />
+      <polygon points="970,178 1105,120 1105,138 970,196" fill="url(#iso-right-cyan)" stroke="#0284c7" stroke-width="1" />
+
+      <!-- Pulsing Holographic Energy Ring on Crown -->
+      <ellipse cx="970" cy="116" rx="58" ry="26" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.7">
+        <animate attributeName="rx" values="46;66;46" dur="3s" repeatCount="indefinite" />
+        <animate attributeName="ry" values="20;29;20" dur="3s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0.85;0.2;0.85" dur="3s" repeatCount="indefinite" />
+      </ellipse>
+
+      <!-- 3D Isometric Hypercube Levitating Above the Crown -->
+      <g transform="translate(970, 74)">
+        <!-- Cube Top Face -->
+        <polygon points="0,-38 42,-18 0,2 -42,-18" fill="#7dd3fc" opacity="0.95" stroke="#ffffff" stroke-width="1.2" />
+        <!-- Cube Left Face -->
+        <polygon points="-42,-18 0,2 0,46 -42,26" fill="#0284c7" opacity="0.92" stroke="#38bdf8" stroke-width="1.2" />
+        <!-- Cube Right Face -->
+        <polygon points="0,2 42,-18 42,26 0,46" fill="#0369a1" opacity="0.95" stroke="#38bdf8" stroke-width="1.2" />
+        <!-- Inner Glowing Quantum Core -->
+        <circle cx="0" cy="4" r="11" fill="#ffffff" filter="url(#glow-intense)">
+          <animate attributeName="r" values="9;14;9" dur="2.2s" repeatCount="indefinite" />
+        </circle>
+      </g>
+
+      <!-- Crown Label Badge -->
+      <rect x="876" y="132" width="188" height="25" rx="6" fill="#041126" opacity="0.94" stroke="#00f5ff" stroke-width="1.2" />
+      <text x="970" y="149" text-anchor="middle" fill="#e0f2fe" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="800">
+        CENTRAL ORCHESTRATOR
+      </text>
+    </g>
+  </g>
+
+  <!-- ======================================================================= -->
+  <!-- FLOATING SATELLITE 3D CUBES & STREAMING NEURAL DATA PACKETS             -->
+  <!-- ======================================================================= -->
+  <!-- Left Satellite 3D Cube: Adaptive Tutor (EN / BN) -->
+  <g filter="url(#drop-3d)">
+    <g transform="translate(748, 165)">
+      <animateTransform attributeName="transform" type="translate" values="748,165; 748,151; 748,165" dur="4.8s" repeatCount="indefinite" />
+      <polygon points="0,-18 22,-7 0,4 -22,-7" fill="#f472b6" />
+      <polygon points="-22,-7 0,4 0,26 -22,15" fill="#db2777" />
+      <polygon points="0,4 22,-7 22,15 0,26" fill="#9d174d" />
+      <rect x="-48" y="32" width="96" height="20" rx="5" fill="#1f091d" stroke="#f472b6" stroke-width="1" />
+      <text x="0" y="45" text-anchor="middle" fill="#fce7f3" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700">EN / বাংলা TUTOR</text>
+    </g>
+  </g>
+
+  <!-- Right Satellite 3D Cube: Verified Citations -->
+  <g filter="url(#drop-3d)">
+    <g transform="translate(1192, 165)">
+      <animateTransform attributeName="transform" type="translate" values="1192,165; 1192,179; 1192,165" dur="5.2s" repeatCount="indefinite" />
+      <polygon points="0,-18 22,-7 0,4 -22,-7" fill="#fbbf24" />
+      <polygon points="-22,-7 0,4 0,26 -22,15" fill="#d97706" />
+      <polygon points="0,4 22,-7 22,15 0,26" fill="#92400e" />
+      <rect x="-54" y="32" width="108" height="20" rx="5" fill="#231404" stroke="#fbbf24" stroke-width="1" />
+      <text x="0" y="45" text-anchor="middle" fill="#fef3c7" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700">VERIFIED SOURCES</text>
+    </g>
+  </g>
+
+  <!-- Animated Glowing Data Packets Streaming Between Layers -->
+  <circle r="4.5" fill="#00f5ff" filter="url(#glow-soft)">
+    <animateMotion dur="3.2s" repeatCount="indefinite">
+      <mpath href="#stream-path-1" />
+    </animateMotion>
+  </circle>
+  <circle r="4.5" fill="#e879f9" filter="url(#glow-soft)">
+    <animateMotion dur="3.6s" repeatCount="indefinite">
+      <mpath href="#stream-path-2" />
+    </animateMotion>
+  </circle>
+  <circle r="4" fill="#34d399" filter="url(#glow-soft)">
+    <animateMotion dur="2.8s" repeatCount="indefinite">
+      <mpath href="#stream-path-3" />
+    </animateMotion>
+  </circle>
 </svg>
