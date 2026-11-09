@@ -1,34 +1,32 @@
 {
-  "name": "claudemy",
-  "displayName": "Claudemy",
-  "version": "0.3.2",
-  "description": "An open-source alternative to Udemy and Coursera: give Claude a topic, it researches the web and builds a course of 2-minute two-host audio lessons with cited sources and one small practice each.",
+  "name": "agentic-learning-os",
+  "displayName": "Agentic Learning OS",
+  "version": "3.0.0",
+  "description": "Learn Anything. Build Everything. Master More. Multi-agent AI Learning Operating System with 10 specialized agents, 21 tools, verified research, adaptive tutoring, coding labs, and spaced repetition.",
   "author": {
-    "name": "Assaf Kipnis",
-    "url": "https://askconsulting.io"
+    "name": "Md. Aktaruzzaman Emon",
+    "url": "https://github.com/emon404x"
   },
   "license": "MIT",
-  "repository": "https://github.com/assafkip/claudemy",
-  "homepage": "https://github.com/assafkip/claudemy",
+  "repository": "https://github.com/emon404x/agentic-learning-os",
+  "homepage": "https://github.com/emon404x/agentic-learning-os",
   "keywords": [
-    "udemy-alternative",
-    "coursera-alternative",
+    "agentic-ai",
+    "learning-os",
+    "multi-agent-systems",
+    "google-antigravity",
+    "adaptive-tutor",
     "course-generator",
-    "learning",
-    "audio-lessons",
-    "microlearning",
-    "podcast",
-    "elevenlabs"
+    "spaced-repetition",
+    "education-ai"
   ],
-  "icon": "./.claude-plugin/icon.png",
-  "documentationUrl": "https://assafkip.github.io/claudemy/",
-  "supportUrl": "https://github.com/assafkip/claudemy/issues",
-  "privacyPolicyUrl": "https://assafkip.github.io/claudemy/privacy.html",
+  "documentationUrl": "https://github.com/emon404x/agentic-learning-os/tree/main/docs",
+  "supportUrl": "https://github.com/emon404x/agentic-learning-os/issues",
   "userConfig": {
     "elevenlabs_api_key": {
       "type": "string",
       "title": "ElevenLabs API key",
-      "description": "Optional. Renders lessons with two natural ElevenLabs voices. Leave empty to use the free macOS voices.",
+      "description": "Optional. Renders audio lessons with natural ElevenLabs voices. Leave empty to use built-in OS voices or text-only fallback.",
       "sensitive": true
     }
   }

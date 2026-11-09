@@ -9,7 +9,7 @@ build/
 .venv/
 venv/
 claudemy-workspace/
-claudemy/
+/claudemy/
 stardi_workspace/
 .env
 .env.*

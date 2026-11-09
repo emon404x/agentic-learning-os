@@ -21,7 +21,7 @@
 $$\text{RESEARCH} \rightarrow \text{UNDERSTAND} \rightarrow \text{PLAN} \rightarrow \text{LEARN} \rightarrow \text{PRACTICE} \rightarrow \text{BUILD} \rightarrow \text{TEST} \rightarrow \text{REVIEW} \rightarrow \text{MASTER}$$
 
 ### 10-Stage Agentic Execution Loop (`LearningOrchestrator`)
-$$\text{UNDERSTAND} \rightarrow \text{PLAN} \rightarrow \text{SELECT\_AGENTS} \rightarrow \text{SELECT\_TOOLS} \rightarrow \text{EXECUTE} \rightarrow \text{OBSERVE} \rightarrow \text{VERIFY} \rightarrow \text{REFLECT} \rightarrow \text{SAVE\_PROGRESS} \rightarrow \text{RESPOND}$$
+$$\text{UNDERSTAND} \rightarrow \text{PLAN} \rightarrow \text{SELECT AGENTS} \rightarrow \text{SELECT TOOLS} \rightarrow \text{EXECUTE} \rightarrow \text{OBSERVE} \rightarrow \text{VERIFY} \rightarrow \text{REFLECT} \rightarrow \text{SAVE PROGRESS} \rightarrow \text{RESPOND}$$
 
 ```mermaid
 flowchart TD

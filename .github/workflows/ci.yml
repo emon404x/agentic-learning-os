@@ -1,4 +1,4 @@
-name: Stardi AI CI
+name: Agentic Learning OS CI
 
 on:
   push:
@@ -24,19 +24,20 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies
+      - name: Install package
         run: |
           python -m pip install --upgrade pip
-          pip install beautifulsoup4
           pip install -e .
 
-      - name: Run full unit, regression, and acceptance test suite (57 tests)
+      - name: Run full unit, agentic architecture, and audit test suite (81 tests)
         run: |
           python -m unittest discover -s tests -v
 
       - name: Run CLI & end-to-end walkthrough verification
         run: |
           python examples/demo_walkthrough.py
-          python scripts/stardi.py route "Teach me computer networking from beginner to advanced."
-          python scripts/stardi.py tutor "I don't understand subnetting."
-          python scripts/stardi.py lab "Teach me DSA using C" --language c --hint 1
+          python scripts/alos.py agents
+          python scripts/alos.py tools
+          python scripts/alos.py orchestrate "Teach me computer networking from beginner to advanced."
+          python scripts/alos.py tutor "I don't understand subnetting."
+          python scripts/alos.py lab "Teach me DSA using C" --language c --hint 1

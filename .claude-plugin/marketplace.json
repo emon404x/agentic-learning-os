@@ -1,15 +1,15 @@
 {
-  "name": "claudemy",
+  "name": "agentic-learning-os",
   "owner": {
-    "name": "Assaf Kipnis",
-    "url": "https://askconsulting.io"
+    "name": "Md. Aktaruzzaman Emon",
+    "url": "https://github.com/emon404x"
   },
-  "description": "Claudemy: turn any topic into a researched course of 2-minute audio lessons with cited sources.",
+  "description": "Agentic Learning OS: Learn Anything. Build Everything. Master More.",
   "plugins": [
     {
-      "name": "claudemy",
+      "name": "agentic-learning-os",
       "source": "./",
-      "description": "Turn any topic into a researched course of 2-minute audio lessons."
+      "description": "Multi-agent AI Learning Operating System with 10 specialized agents and 15 Antigravity skills."
     }
   ]
 }
